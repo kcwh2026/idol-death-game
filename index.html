@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>铜偶像之死</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<audio id="bgm" loop><source src="assets/audio/pocket_sky.mp3" type="audio/mpeg"></audio>
+
+<div class="desktop">
+    <div class="overlay"></div>
+
+    <div id="global-phone-transition" class="global-phone-transition">
+        <div id="global-phone-text" class="global-phone-text">林爱星的手机送到了……</div>
+    </div>
+
+    <audio id="door-knock-audio" preload="auto">
+        <source src="assets/audio/door_knock.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="mail-toast" class="mail-toast" onclick="openMailApp()">
+        <div class="mail-toast-app">邮件</div>
+        <div id="mail-toast-title" class="mail-toast-title"></div>
+        <div id="mail-toast-body" class="mail-toast-body"></div>
+    </div>
+
+    <div class="menu-bar">
+        <div>访达 文件 编辑 显示 前往 窗口 帮助</div>
+        <div>2026年4月1日 13:14</div>
+    </div>
+
+    <div class="dock-bar">
+        <div class="dock-item" onclick="openSafari()">
+            <div class="dock-img"><img src="assets/images/icons/icon_safari.png"></div>
+        </div>
+
+        <div class="dock-item" onclick="openMailApp()">
+            <div class="dock-img"><img src="assets/images/icons/icon_mail.png"></div>
+        </div>
+
+        <div class="dock-item" id="phone-dock-item" onclick="openLinaixingPhone()" style="display:none;">
+            <div class="dock-img"><img src="assets/images/icons/phone_icon.png"></div>
+        </div>
+
+        <div class="dock-item" id="detective-dock-item" onclick="openDetectiveHub()" style="display:none;">
+            <div class="dock-img"><img src="assets/images/icons/icon_detective.png"></div>
+        </div>
+
+        <div class="dock-item">
+            <div class="dock-img"><img src="assets/images/icons/icon_photos.png"></div>
+        </div>
+
+        <div class="dock-item">
+            <div class="dock-img"><img src="assets/images/icons/icon_notes.png"></div>
+        </div>
+
+        <div class="dock-item" id="music-desktop-icon" onclick="toggleMusic()">
+            <div class="dock-img"><img src="assets/images/icons/icon_music.png"></div>
+        </div>
+    </div>
+
+    <div id="safari-window" class="window">
+        <div class="phone-close-btn" onclick="closePhoneMode()">×</div>
+
+        <div class="window-header">
+            <div class="traffic-lights">
+                <div class="red" onclick="closeSafari()"></div>
+                <div class="yellow"></div>
+                <div class="green"></div>
+            </div>
+            <div class="safari-nav">
+                <div id="browser-back" class="browser-back-btn" onclick="handleBrowserBack()">←</div>
+                <div id="safari-url" class="address-bar">起始页</div>
+            </div>
+        </div>
+
+        <iframe id="browser-iframe" src="about:blank" frameborder="0" style="flex:1; width:100%; height:100%; background:#fff;"></iframe>
+    </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
