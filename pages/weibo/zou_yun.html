@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>邹耘的微博</title>
+<style>
+body{
+    margin:0;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f5f5f5;
+}
+
+.weibo-top{
+    height:56px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    font-size:14px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.back-btn{
+    cursor:pointer;
+    color:#666;
+    margin-right:20px;
+    font-weight:bold;
+}
+
+.back-btn:hover{
+    color:#ff8200;
+}
+
+.profile-header{
+    background:#fff;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    border-bottom:1px solid #eee;
+}
+
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #f2f2f2;
+}
+
+.name{
+    font-size:24px;
+    font-weight:bold;
+    color:#111;
+}
+
+.bio{
+    color:#666;
+    margin-top:8px;
+    line-height:1.8;
+    font-size:14px;
+}
+
+.feed{
+    width:700px;
+    margin:20px auto;
+}
+
+.post{
+    background:#fff;
+    padding:20px;
+    margin-bottom:16px;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+
+.post-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.post-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.post-name{
+    font-weight:bold;
+    font-size:15px;
+}
+
+.post-time{
+    color:#999;
+    font-size:12px;
+}
+
+.post-content{
+    line-height:1.9;
+    font-size:15px;
+    color:#222;
+}
+</style>
+</head>
+<body>
+
+<div class="weibo-top">
+    <span class="back-btn" onclick="goBack()">← 返回搜索结果</span>
+    微博
+</div>
+
+<div class="profile-header">
+    <img src="../../assets/images/avatars/zou_yun_avatar.png" class="avatar">
+    <div>
+        <div class="name">Spr1n9_邹耘</div>
+        <div class="bio">
+            Spr1n9队长 / 主舞 / 姐姐担当<br>
+            冰美式续命中 ☕
+        </div>
+    </div>
+</div>
+
+<div class="feed">
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/zou_yun_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_邹耘</div>
+                <div class="post-time">2026-03-31 01:12</div>
+            </div>
+        </div>
+        <div class="post-content">
+            今天排练结束得很晚。<br>
+            大家都累了，但还是坚持把最后一遍队形顺完。<br>
+            爱星最近状态不太好，回去路上一直没说话。<br>
+            希望明天会好一点。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/zou_yun_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_邹耘</div>
+                <div class="post-time">2026-03-05 09:40</div>
+            </div>
+        </div>
+        <div class="post-content">
+            关于嘉嘉的决定，我们都尊重。<br>
+            很舍不得，但也希望她以后能走自己真正想走的路。<br>
+            这段时间辛苦了。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/zou_yun_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_邹耘</div>
+                <div class="post-time">2026-02-20 09:55</div>
+            </div>
+        </div>
+        <div class="post-content">
+            网上有些讨论已经影响到成员生活了。<br>
+            请大家多关注作品，少传播未经证实的信息。<br>
+            谢谢。
+        </div>
+    </div>
+
+</div>
+
+<script>
+function goBack(){
+    window.parent.postMessage({
+        type:'NAVIGATE',
+        url:'pages/baidu_home.html',
+        displayUrl:'百度搜索'
+    },'*');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林爱星的手机</title>
+    <style>
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #000;
+        }
+
+        .phone-home {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-image: url('../../assets/images/posts/linaixing_diary2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+        }
+
+        .phone-home::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to bottom, rgba(20,20,35,0.10), rgba(10,10,18,0.18)),
+                radial-gradient(circle at top center, rgba(255,255,255,0.08), transparent 35%);
+        }
+
+        .status-bar {
+            position: absolute;
+            top: 16px;
+            left: 18px;
+            right: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 3;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.28);
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .signal {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 14px;
+        }
+
+        .signal span {
+            display: block;
+            width: 4px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 2px;
+        }
+
+        .signal span:nth-child(1) { height: 5px; }
+        .signal span:nth-child(2) { height: 8px; }
+        .signal span:nth-child(3) { height: 11px; }
+        .signal span:nth-child(4) { height: 14px; }
+
+        .battery {
+            position: relative;
+            width: 28px;
+            height: 15px;
+            border: 2px solid rgba(255,255,255,0.9);
+            border-radius: 5px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .battery::after {
+            content: "";
+            position: absolute;
+            right: -4px;
+            width: 3px;
+            height: 7px;
+            border-radius: 0 2px 2px 0;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .home-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            padding: 56px 18px 92px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-widgets {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .widget {
+            background: rgba(255,255,255,0.16);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 22px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .date-widget {
+            padding: 14px 16px;
+            min-height: 118px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .date-week {
+            font-size: 14px;
+            opacity: 0.92;
+            margin-bottom: 6px;
+        }
+
+        .date-day {
+            font-size: 46px;
+            line-height: 1;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .date-note {
+            font-size: 13px;
+            opacity: 0.92;
+            line-height: 1.6;
+        }
+
+        .photo-widget {
+            overflow: hidden;
+            min-height: 118px;
+            position: relative;
+        }
+
+        .photo-widget img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-widget::after {
+            content: "今日回忆";
+            position: absolute;
+            left: 12px;
+            bottom: 10px;
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.28);
+            backdrop-filter: blur(8px);
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px 10px;
+            padding: 6px 2px 0;
+        }
+
+        .app {
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .app-icon {
+            width: 62px;
+            height: 62px;
+            margin: 0 auto 6px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .app-name {
+            font-size: 12px;
+            line-height: 1.2;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.22);
+        }
+
+        .dock {
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: 14px;
+            z-index: 3;
+            padding: 10px 14px;
+            border-radius: 28px;
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.16);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .dock .app-icon {
+            width: 58px;
+            height: 58px;
+            margin-bottom: 0;
+        }
+
+        .toast {
+            position: absolute;
+            left: 50%;
+            bottom: 96px;
+            transform: translateX(-50%);
+            z-index: 5;
+            padding: 10px 16px;
+            border-radius: 14px;
+            background: rgba(20,20,25,0.72);
+            color: #fff;
+            font-size: 13px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 430px) {
+            .home-content {
+                padding: 54px 14px 88px;
+            }
+
+            .app-grid {
+                gap: 16px 8px;
+            }
+
+            .app-icon {
+                width: 58px;
+                height: 58px;
+                border-radius: 17px;
+            }
+
+            .dock .app-icon {
+                width: 54px;
+                height: 54px;
+            }
+
+            .date-day {
+                font-size: 42px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-home">
+        <div class="status-bar">
+            <div>中国移动</div>
+            <div class="status-right">
+                <div class="signal">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+                <div>5G</div>
+                <div class="battery">52</div>
+            </div>
+        </div>
+
+        <div class="home-content">
+            <div class="top-widgets">
+                <div class="widget date-widget">
+                    <div class="date-week">星期二 · 4月7日</div>
+                    <div class="date-day">07</div>
+                    <div class="date-note">今天也要做闪闪发亮的小星 ✨</div>
+                </div>
+
+                <div class="widget photo-widget" onclick="showToast('这张照片已经被设为精选回忆')">
+                    <img src="../../assets/images/posts/linaixing_diary2.png" alt="精选照片">
+                </div>
+            </div>
+
+            <div class="app-grid">
+                <div class="app" onclick="showToast('微信数据正在同步中')">
+                    <div class="app-icon"><img src="../../assets/images/icons/icon_wechat.png" alt="微信"></div>
+                    <div class="app-name">微信</div>
+                </div>
+
+
+
+                <div class="app" onclick="window.parent.postMessage({type:'NAVIGATE', url:'pages/phone/linaixing_phone_weibo.html', displayUrl:'微博'}, '*')">
+                    <div class="app-icon"><img src="../../assets/images/icons/icon_weibo.png" alt="微博"></div>
+                    <div class="app-name">微博</div>
+                </div>
+
+                <div class="app" onclick="showToast('备忘录已上锁')">
+                    <div class="app-icon"><img src="../../assets/images/icons/icon_notes.png" alt="备忘录"></div>
+                    <div class="app-name">备忘录</div>
+                </div>
+
+                <div class="app" onclick="showToast('音乐正在载入歌单')">
+                    <div class="app-icon"><img src="../../assets/images/icons/icon_spotify.png" alt="音乐"></div>
+                    <div class="app-name">音乐</div>
+                </div>
+
+                <div class="app" onclick="showToast('日历里写满了工作安排')">
+                    <div class="app-icon"><img src="../../assets/images/icons/icon_calendar.png" alt="日历"></div>
+                    <div class="app-name">日历</div>
+                </div>
+
+                <div class="app" onclick="showToast('小红书还停留在上次浏览页面')">
+                    <div class="app-icon"><img src="../../assets/images/icons/icon_rednote.png" alt="小红书"></div>
+                     <div class="app-name">小红书</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="dock">
+
+             <div class="app" onclick="showToast('今日无新的通话记录')">
+                <div class="app-icon"><img src="../../assets/images/icons/icon_phone.png" alt="电话"></div>            
+            </div>    
+
+             <div class="app" onclick="showToast('相册尚未整理完成')">
+                <div class="app-icon"><img src="../../assets/images/icons/icon_photos.png" alt="相册"></div>
+            </div>
+
+            <div class="app" onclick="showToast('相机暂时无法调用')">
+                <div class="app-icon"><img src="../../assets/images/icons/icon_camera.png" alt="相机"></div>
+            </div>
+
+            <div class="app" onclick="showToast('时钟里有很多清晨闹钟')">
+                <div class="app-icon"><img src="../../assets/images/icons/icon_clock.png" alt="时钟"></div>
+            </div>
+
+        </div>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        let toastTimer = null;
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.textContent = text;
+            toast.classList.add('show');
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 1800);
+        }
+        
+        function openPhoneWeibo() {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/phone/linaixing_phone_weibo.html',
+                displayUrl: '微博'
+            }, '*');
+        }
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'BROWSER_BACK') {
+                window.parent.postMessage({
+                    type: 'NAVIGATE',
+                    url: 'pages/phone/linaixing_phone_lock.html',
+                    displayUrl: '林爱星的手机'
+                }, '*');
+            }
+        });
+    </script>
+</body>
+</html>

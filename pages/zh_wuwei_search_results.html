@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>至无畏的你 - 百度搜索</title>
+    <style>
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: #333;
+            background-color: #fff;
+            line-height: 1.6;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .highlight {
+            transition: background-color 0.2s ease-in-out;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .highlight:hover {
+            background-color: #ffeb3b;
+        }
+        .universal-nav {
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 120px;
+            font-size: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+        .back-to-search {
+            color: #666;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        .back-to-search:hover { color: #2319dc; }
+
+        .main-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .a-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .a-title {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            color: #000;
+        }
+        .a-meta {
+            font-size: 13px;
+            color: #888;
+            display: flex;
+            gap: 20px;
+        }
+        .a-body {
+            font-size: 17px;
+            color: #222;
+            text-align: justify;
+        }
+        .a-body p {
+            margin-bottom: 20px;
+            text-indent: 2em;
+            line-height: 1.8;
+        }
+        .sina-theme .media-header {
+            background-color: #d32f2f;
+            color: #fff;
+            padding: 12px 120px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 800px) {
+            .universal-nav,
+            .sina-theme .media-header {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="universal-nav">
+        <span class="back-to-search" onclick="goBackToBaiduHome()">← 返回百度首页</span>
+    </div>
+
+    <div class="sina-theme">
+        <div class="media-header">新浪娱乐</div>
+        <div class="main-container">
+            <div class="a-header">
+                <div class="a-title">林爱星首次主演电视剧《至无畏的你》</div>
+                <div class="a-meta"><span>来源：新浪娱乐</span><span>时间：2026年2月19日</span></div>
+            </div>
+            <div class="a-body">
+                <p>都市青春题材电视剧《至无畏的你》近日公开首批角色物料，林爱星将在剧中饰演女主角<span class="highlight">“许知遥”</span>。这是她首次以主演身份完整参与电视剧项目，也意味着其正式开启影视方向尝试。</p>
+                <p>《至无畏的你》讲述了一群年轻人在都市生活中面对理想、爱情与自我认同的成长故事。林爱星饰演的许知遥是一位外表温柔、内心坚定的新人记者，在不断追寻新闻理想的过程中重新理解勇气与选择的意义。</p>
+                <p>制作方表示，林爱星在试读剧本阶段便展现出与角色高度契合的气质。导演钱默群也称赞她“镜头感非常自然，情绪表达细腻”。</p>
+                <p>不少粉丝认为，这次角色设定与她以往甜美元气的舞台形象形成了新鲜反差，也让人更加期待她在演员身份上的未来发展。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBackToBaiduHome() {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/baidu_home.html',
+                displayUrl: '百度'
+            }, '*');
+        }
+
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'BROWSER_BACK') {
+                goBackToBaiduHome();
+            }
+        });
+    </script>
+</body>
+</html>

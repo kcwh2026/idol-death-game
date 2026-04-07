@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百度</title>
+
+    <style>
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: #333;
+            background-color: #fff;
+            line-height: 1.6;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #baidu-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px 100px;
+            box-sizing: border-box;
+        }
+
+        .baidu-logo {
+            font-size: 60px;
+            font-weight: bold;
+            color: #2319dc;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        .search-box {
+            display: flex;
+            width: 600px;
+            max-width: 100%;
+            border: 2px solid #c4c7ce;
+            border-radius: 10px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            outline: none;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .search-btn {
+            background: #3388ff;
+            color: #fff;
+            border: none;
+            padding: 0 25px;
+            font-size: 16px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 768px) {
+            #baidu-wrapper {
+                justify-content: flex-start;
+                padding-top: 20vh;
+                padding-bottom: 40px;
+            }
+
+            .baidu-logo {
+                font-size: 48px;
+                margin-bottom: 18px;
+            }
+
+            .search-box {
+                width: 100%;
+                border-radius: 12px;
+            }
+
+            .search-input {
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+
+            .search-btn {
+                padding: 0 18px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .baidu-logo {
+                font-size: 42px;
+            }
+
+            .search-input {
+                font-size: 15px;
+                padding: 14px 14px;
+            }
+
+            .search-btn {
+                padding: 0 14px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="baidu-wrapper">
+        <div class="baidu-logo">
+            Bai<span style="color:#ff3344;">du</span>
+        </div>
+
+        <div class="search-box">
+            <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="输入关键词搜索"
+            >
+            <button
+                onclick="handleSearch()"
+                class="search-btn"
+            >
+                百度一下
+            </button>
+        </div>
+    </div>
+
+<script>
+    function handleSearch() {
+        const rawVal = document.getElementById('search-input').value.trim();
+        const val = rawVal.toLowerCase();
+
+        if (val.includes('spr1n9')) {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/spr1n9_search_results.html',
+                displayUrl: '百度搜索'
+            }, '*');
+
+        } else if (
+            rawVal.includes('林爱星') ||
+            val.includes('lin aixing') ||
+            val.includes('lin_aixing')
+        ) {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/lin_aixing_search_results.html',
+                displayUrl: '百度搜索'
+            }, '*');
+
+        } else if (rawVal.includes('夏露一')) {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/xia_luyi_baike.html',
+                displayUrl: '百度百科'
+            }, '*');
+
+        } else if (rawVal.includes('邹耘')) {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/zou_yun_baike.html',
+                displayUrl: '百度百科'
+            }, '*');
+
+        } else if (rawVal.includes('陈思嘉')) {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/chen_sijia_baike.html',
+                displayUrl: '百度百科'
+            }, '*');
+
+        } else if (
+            rawVal.includes('FD Entertainment') ||
+            rawVal.includes('FD公司') ||
+            rawVal.includes('FD娱乐') ||
+            rawVal.includes('FOR DREAM') ||
+            rawVal.includes('fd') ||
+            rawVal.includes('FD')
+        ) {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/fd_official.html',
+                displayUrl: 'FD Entertainment - 百度搜索'
+            }, '*');
+
+        } else if (
+            rawVal.includes('至无畏的你') ||
+            rawVal.includes('许知遥') ||
+            rawVal.includes('钱默群')
+        ) {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/zh_wuwei_search_results.html',
+                displayUrl: '百度搜索'
+            }, '*');
+
+        } else if (
+            rawVal.includes('飞凰大酒店') ||
+            rawVal.includes('飞凰酒店')
+        ) {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/feihuang_hotel.html',
+                displayUrl: '飞凰大酒店 - 百度搜索'
+            }, '*');
+
+        } else if (rawVal.includes('周人杰')) {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/qichacha_zhou_renjie.html',
+                displayUrl: '企查查'
+            }, '*');
+
+        } else {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/baidu_no_results.html?keyword=' + encodeURIComponent(rawVal),
+                displayUrl: '百度搜索'
+            }, '*');
+        }
+    }
+
+    document.getElementById('search-input').addEventListener('keypress', e => {
+        if (e.key === 'Enter') handleSearch();
+    });
+
+    window.addEventListener('message', (e) => {
+        if (e.data.type === 'BROWSER_BACK') {
+            window.parent.postMessage({
+                type: 'GO_TO_START'
+            }, '*');
+        }
+    });
+</script>
+</body>
+</html>

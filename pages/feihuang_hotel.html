@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飞凰大酒店 - 官方网站</title>
+    <style>
+        body{
+            margin:0;
+            font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+            background:#f7f2eb;
+            color:#2e241f;
+        }
+
+        .highlight{
+            transition:background-color .2s;
+            border-radius:4px;
+            padding:0 2px;
+            cursor:pointer;
+        }
+
+        .highlight:hover{
+            background:#ffeb3b;
+            color:#000;
+        }
+
+        .topbar{
+            position:sticky;
+            top:0;
+            z-index:20;
+            background:rgba(46,36,31,.92);
+            backdrop-filter:blur(12px);
+            border-bottom:1px solid rgba(255,255,255,.08);
+            color:#f7ead8;
+            padding:16px 28px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .brand{
+            font-size:26px;
+            font-weight:bold;
+            letter-spacing:2px;
+        }
+
+        .brand small{
+            display:block;
+            font-size:11px;
+            letter-spacing:2px;
+            opacity:.72;
+            margin-top:4px;
+            font-weight:normal;
+        }
+
+        .nav{
+            display:flex;
+            gap:26px;
+            font-size:14px;
+            opacity:.88;
+        }
+
+        .hero{
+            position:relative;
+            background:linear-gradient(135deg,#4e1f1f 0%,#7a4135 50%,#c7a06a 100%);
+            color:#fff6ea;
+            padding:100px 28px 120px;
+            overflow:hidden;
+        }
+
+        .hero::after{
+            content:"";
+            position:absolute;
+            inset:0;
+            background:radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 35%);
+            pointer-events:none;
+        }
+
+        .hero-inner{
+            max-width:1100px;
+            margin:0 auto;
+            position:relative;
+            z-index:1;
+        }
+
+        .hero-sub{
+            font-size:13px;
+            letter-spacing:3px;
+            opacity:.8;
+            margin-bottom:18px;
+        }
+
+        .hero-title{
+            font-size:58px;
+            font-weight:bold;
+            line-height:1.12;
+            margin-bottom:18px;
+        }
+
+        .hero-text{
+            max-width:720px;
+            font-size:16px;
+            line-height:1.95;
+            opacity:.92;
+        }
+
+        .page{
+            max-width:1100px;
+            margin:24px auto 0;
+            padding:0 20px 40px;
+        }
+
+        .section{
+            background:#fffaf4;
+            border:1px solid #eadbcb;
+            border-radius:22px;
+            padding:28px;
+            margin-bottom:22px;
+            box-shadow:0 8px 26px rgba(90,55,35,.08);
+        }
+
+        .section-title{
+            font-size:24px;
+            font-weight:bold;
+            margin-bottom:18px;
+            color:#6a3b2c;
+            position:relative;
+            padding-left:14px;
+        }
+
+        .section-title::before{
+            content:"";
+            position:absolute;
+            left:0;
+            top:7px;
+            width:4px;
+            height:22px;
+            background:#b88952;
+            border-radius:999px;
+        }
+
+        .intro-grid{
+            display:grid;
+            grid-template-columns:1.15fr 1fr;
+            gap:18px;
+        }
+
+        .intro-card{
+            background:linear-gradient(180deg,#fffdf9,#f8efe4);
+            border:1px solid #eadfce;
+            border-radius:18px;
+            padding:22px 20px;
+        }
+
+        .intro-card h3{
+            margin:0 0 10px;
+            font-size:18px;
+            color:#6f3f2f;
+        }
+
+        .intro-card p{
+            margin:0;
+            color:#6d6158;
+            font-size:14px;
+            line-height:1.9;
+        }
+
+        .stats{
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:14px;
+            margin-top:16px;
+        }
+
+        .stat-box{
+            background:#fff;
+            border:1px solid #eadfce;
+            border-radius:16px;
+            padding:18px 16px;
+            text-align:center;
+        }
+
+        .stat-label{
+            font-size:12px;
+            color:#8a7c71;
+            margin-bottom:8px;
+        }
+
+        .stat-value{
+            font-size:24px;
+            font-weight:bold;
+            color:#7a4631;
+        }
+
+        .grid-3{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:16px;
+        }
+
+        .room-card{
+            background:#fff;
+            border:1px solid #eadfce;
+            border-radius:18px;
+            overflow:hidden;
+        }
+
+        .room-photo{
+            height:180px;
+            background:linear-gradient(135deg,#c7a06a,#f3dfbf);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#6b4a2f;
+            font-size:14px;
+            letter-spacing:1px;
+        }
+
+        .room-info{
+            padding:16px;
+        }
+
+        .room-name{
+            font-size:18px;
+            font-weight:bold;
+            color:#6f3f2f;
+            margin-bottom:6px;
+        }
+
+        .room-text{
+            font-size:14px;
+            color:#6d6158;
+            line-height:1.85;
+        }
+
+        .manager-box{
+            background:linear-gradient(180deg,#fffdf9,#f7ecdf);
+            border:1px solid #eadfce;
+            border-radius:18px;
+            padding:22px;
+        }
+
+        .manager-role{
+            font-size:12px;
+            color:#8a7c71;
+            margin-bottom:6px;
+        }
+
+        .manager-name{
+            font-size:30px;
+            font-weight:bold;
+            color:#5d3327;
+            margin-bottom:10px;
+        }
+
+        .manager-desc{
+            color:#6d6158;
+            font-size:14px;
+            line-height:1.9;
+        }
+
+        .contact-grid{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:16px;
+        }
+
+        .contact-item{
+            background:#fff;
+            border:1px solid #eadfce;
+            border-radius:16px;
+            padding:18px;
+        }
+
+        .contact-item h4{
+            margin:0 0 8px;
+            font-size:16px;
+            color:#6f3f2f;
+        }
+
+        .contact-item p{
+            margin:0;
+            color:#6d6158;
+            font-size:14px;
+            line-height:1.8;
+        }
+
+        .footer{
+            max-width:1100px;
+            margin:0 auto;
+            padding:8px 28px 42px;
+            color:#8d8075;
+            font-size:13px;
+        }
+
+        @media (max-width:900px){
+            .hero{
+                padding:72px 20px 90px;
+            }
+
+            .hero-title{
+                font-size:42px;
+            }
+
+            .intro-grid,
+            .grid-3,
+            .stats,
+            .contact-grid{
+                grid-template-columns:1fr;
+            }
+
+            .nav{
+                display:none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="brand">
+            飞凰大酒店
+            <small>FEIHUANG GRAND HOTEL</small>
+        </div>
+        <div class="nav">
+            <span>酒店介绍</span>
+            <span>客房预览</span>
+            <span>宴会服务</span>
+            <span>管理团队</span>
+            <span>联系方式</span>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-sub">LUXURY · PRIVATE · BUSINESS</div>
+            <div class="hero-title">飞凰大酒店</div>
+            <div class="hero-text">
+                
+                飞凰大酒店坐落于 B 市核心商务区，集高端住宿、私宴会客、商务接待与品牌活动承办于一体。
+                酒店以低调奢雅的空间设计与高私密度服务著称，长期为文娱、金融、地产及高端商务客户提供定制化接待方案。
+            
+            </div>
+        </div>
+    </section>
+
+    <main class="page">
+        <section class="section">
+            <div class="section-title">酒店概况</div>
+
+            <div class="intro-grid">
+                <div class="intro-card">
+                    <h3>关于飞凰</h3>
+                    <p>
+                        飞凰大酒店于 2018 年正式营业，定位于城市高端商务与宴会接待场所。酒店拥有独立行政楼层、
+                        私宴厅、品牌活动场地及贵宾休息区，适合商务洽谈、品牌晚宴、媒体酒会与封闭式会客需求。
+                    </p>
+                </div>
+
+                <div class="intro-card">
+                    <h3>服务特色</h3>
+                    <p>
+                        以“安静、私密、礼遇”作为服务核心。酒店在空间管理、客户动线与后台支持方面均采用高标准配置，
+                        以满足不同级别活动与接待需求。
+                    </p>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-label">开业时间</div>
+                    <div class="stat-value">2018</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">客房数量</div>
+                    <div class="stat-value">286</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">宴会空间</div>
+                    <div class="stat-value">6 处</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">酒店评级</div>
+                    <div class="stat-value">五星</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">客房与场地</div>
+            <div class="grid-3">
+                <div class="room-card">
+                    <div class="room-photo">行政套房</div>
+                    <div class="room-info">
+                        <div class="room-name">行政套房</div>
+                        <div class="room-text">
+                            适用于长期商务客户及高规格接待，配有独立会客区、办公区与专属管家服务。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="room-photo">云庭宴会厅</div>
+                    <div class="room-info">
+                        <div class="room-name">云庭宴会厅</div>
+                        <div class="room-text">
+                            常用于品牌晚宴、媒体发布会及私密商务宴请，配备独立后台及贵宾通道。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="room-photo">顶层私宴厅</div>
+                    <div class="room-info">
+                        <div class="room-name">顶层私宴厅</div>
+                        <div class="room-text">
+                            以低调奢雅的场地氛围和极高私密性著称，适合封闭式商务会客与私人宴请。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">管理团队</div>
+            <div class="manager-box">
+                <div class="manager-role">董事长 / 实际控制人</div>
+                <div class="manager-name"><span class="highlight">陈立安</span></div>
+                <div class="manager-desc">
+                    长期从事酒店管理、商业运营与综合文娱投资业务，名下关联多家酒店管理、文化传媒及商业服务企业。
+                    近年来持续推动飞凰大酒店向高端商务接待与活动场地运营方向拓展。
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">联系信息</div>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h4>酒店地址</h4>
+                    <p>B 市云栖大道 88 号</p>
+                </div>
+                <div class="contact-item">
+                    <h4>商务合作</h4>
+                    <p>biz@feihuanghotel.com</p>
+                </div>
+                <div class="contact-item">
+                    <h4>前台电话</h4>
+                    <p>010-6688-2188</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="footer">
+        © 2026 飞凰大酒店 Feihuang Grand Hotel. All Rights Reserved.
+    </div>
+
+    <script>
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'BROWSER_BACK') {
+                window.parent.postMessage({
+                    type: 'NAVIGATE',
+                    url: 'pages/baidu_home.html',
+                    displayUrl: '百度搜索'
+                }, '*');
+            }
+        });
+    </script>
+</body>
+</html>

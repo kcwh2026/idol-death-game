@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百度搜索</title>
+    <style>
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: #333;
+            background-color: #fff;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .universal-nav {
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 120px;
+            font-size: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-to-search {
+            color: #666;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .back-to-search:hover {
+            color: #2319dc;
+        }
+
+        .page-wrap {
+            padding: 28px 100px 60px;
+        }
+
+        .search-bar-wrap {
+            margin-bottom: 28px;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2319dc;
+            margin-bottom: 18px;
+        }
+
+        .search-box {
+            display: flex;
+            width: 640px;
+            max-width: 100%;
+            border: 2px solid #c4c7ce;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-box button {
+            background: #3388ff;
+            color: #fff;
+            border: none;
+            padding: 0 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .no-result-box {
+            max-width: 700px;
+            padding: 22px 0;
+        }
+
+        .no-result-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .no-result-text {
+            color: #666;
+            line-height: 1.9;
+            font-size: 14px;
+        }
+
+        .tips-box {
+            margin-top: 24px;
+            background: #f5f6f7;
+            padding: 16px 18px;
+            border-radius: 8px;
+            max-width: 700px;
+        }
+
+        .tips-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tips-box ul {
+            margin: 0;
+            padding-left: 18px;
+            color: #666;
+            line-height: 1.9;
+            font-size: 14px;
+        }
+
+        @media (max-width: 800px) {
+            .universal-nav,
+            .page-wrap {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="universal-nav">
+        <span class="back-to-search" onclick="goBackToBaiduHome()">← 返回百度首页</span>
+    </div>
+
+    <div class="page-wrap">
+        <div class="search-bar-wrap">
+            <div class="logo">Bai<span style="color:#ff3344;">du</span></div>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="输入关键词搜索">
+                <button onclick="handleSearch()">百度一下</button>
+            </div>
+        </div>
+
+        <div class="no-result-box">
+            <div class="no-result-title">抱歉，没有找到与 “<span id="keyword-text"></span>” 相关的网页。</div>
+            <div class="no-result-text">
+                百度为您找到相关结果约 0 个。<br>
+                请尝试更换关键词，或检查输入内容是否正确。
+            </div>
+        </div>
+
+        <div class="tips-box">
+            <div class="tips-title">建议：</div>
+            <ul>
+                <li>请检查输入文字有无错误</li>
+                <li>请尝试使用更常见的关键词</li>
+                <li>请尝试缩短或更换搜索词</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function getKeyword() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('keyword') || '';
+        }
+
+        function goBackToBaiduHome() {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/baidu_home.html',
+                displayUrl: '百度'
+            }, '*');
+        }
+
+        function handleSearch() {
+            const rawVal = document.getElementById('search-input').value.trim();
+            const val = rawVal.toLowerCase();
+
+            if (val.includes('spr1n9')) {
+                window.parent.postMessage({
+                    type: 'NAVIGATE',
+                    url: 'pages/spr1n9_search_results.html',
+                    displayUrl: '百度搜索'
+                }, '*');
+            } else if (
+                rawVal.includes('林爱星') ||
+                val.includes('lin aixing') ||
+                val.includes('lin_aixing')
+            ) {
+                window.parent.postMessage({
+                    type: 'NAVIGATE',
+                    url: 'pages/lin_aixing_search_results.html',
+                    displayUrl: '百度搜索'
+                }, '*');
+            } else if (
+                rawVal.includes('至无畏的你') ||
+                rawVal.includes('许知遥') ||
+                rawVal.includes('钱默群')
+            ) {
+                window.parent.postMessage({
+                    type: 'NAVIGATE',
+                    url: 'pages/zh_wuwei_search_results.html',
+                    displayUrl: '百度搜索'
+                }, '*');
+            } else {
+                window.parent.postMessage({
+                    type: 'NAVIGATE',
+                    url: 'pages/baidu_no_results.html?keyword=' + encodeURIComponent(rawVal),
+                    displayUrl: '百度搜索'
+                }, '*');
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('keypress', e => {
+            if (e.key === 'Enter') handleSearch();
+        });
+
+        document.getElementById('keyword-text').innerText = getKeyword();
+        document.getElementById('search-input').value = getKeyword();
+
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'BROWSER_BACK') {
+                goBackToBaiduHome();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body style="background:#fff; height:100vh;">
+    <div class="safari-start-page" style="height:100%;">
+        <div class="site-icon" onclick="goTo('pages/weibo.html', 'weibo.com/home')"><div class="site-img"><img src="../assets/images/sites/site_weibo.png"></div><div class="site-label">微博</div></div>
+        <div class="site-icon" onclick="goTo('pages/baidu_home.html', 'baidu.com')"><div class="site-img"><img src="../assets/images/sites/site_baidu.png"></div><div class="site-label">百度</div></div>
+    </div>
+
+    <script>
+        function goTo(url, displayUrl) {
+            window.parent.postMessage({type: 'NAVIGATE', url: url, displayUrl: displayUrl}, '*');
+        }
+    </script>
+</body>
+</html>

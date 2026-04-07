@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body style="margin:0; height:100vh; background:#fff;">
+    
+    <div id="weibo-wrapper" style="display:flex; flex:1; width:100%; height:100%; overflow:hidden;">
+        <div class="weibo-layout">
+            <div class="sidebar-left">
+                <div id="det-mini-sidebar" onclick="toggleView('profile')" style="cursor:pointer; text-align:center;"><div class="mini-avatar-camera"><img src="../assets/images/avatars/jiuyue_camera_avatar.png"></div><div class="detective-id">久跃9私人侦探所</div><p style="font-size:10px; color:#999; margin-top:5px;">查看主页 ></p></div>
+                <div id="profile-sidebar-links" style="display:none;"><button onclick="toggleView('home')" style="border:1px solid #3385ff; color:#3385ff; background:none; border-radius:20px; padding:5px 15px; margin-bottom:15px; cursor:pointer; width:100%;"><div style="color:#3385ff; font-weight:bold; background:#f0faff; padding:10px; border-radius:4px; font-size:14px;">返回首页</div></div>
+            </div>
+            <div id="feed-scroller" class="feed-container">
+                <div id="feed-home">
+                    <div class="card">
+                        <div class="card-header"><div class="card-avatar"><img src="../assets/images/avatars/spr1n9_official_avatar.png"></div><div class="verified-name"><span class="hl">Spr1n9</span>官方微博<span class="verified-icon">V</span></div></div>
+                        <div class="post-text-body">
+                            【讣告】我们怀着极其沉痛且破碎的心情，正式向社会各界及每一位关心、爱护她的朋友告知：<span class="hl">Spr1n9</span>组合成员、我们最深爱的家人<span class="hl">林爱星</span>，于今日早间永远地离开了这个世界。<br><br>
+                            经医护人员全力抢救，终因伤势过重，这颗曾在舞台上拼尽全力闪耀、曾用最纯粹的笑容温暖过无数疲惫灵魂的星辰，在今晨停止了呼吸。<br><br>
+                            <span class="hl">爱星</span>不仅是追求完美的偶像，更是我们生活中无法替代的伙伴、挚友与家人。在每一个挥洒汗水的练习室深夜，在每一次并肩作战的舞台背后，她始终以最坚韧的意志和最温柔的内心支持着身边的每一个人。我们从未预料过，命运会以这样残酷且仓促的方式强行收回她的光芒。这种空洞与悲伤，非笔墨所能形容。<br><br>
+                            此刻，整个组合都仿佛失去了色彩。我们失去了最珍视的一抹亮色，而世界也失去了一个温柔的灵魂。<br><br>
+                            愿星辰长眠，愿她所去往的地方只有永恒的宁静与自由，不再有刺骨的长夜、不再有无法言说的疲惫与束缚。公司目前正全力协助家属处理相关后续事宜。星辰虽陨落于人间，但她的光，将永远镌刻在每一个深爱过她的人心中。<span class="hl">爱星</span>，一路走好。
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><div class="card-avatar" style="background:red; color:#fff; text-align:center; line-height:42px; font-weight:bold;">N</div><div class="verified-name">头号新闻<span class="verified-icon">V</span></div></div>
+                        <div class="post-text-body">#<span class="hl">林爱星</span>自杀# 独家：<span class="hl">Spr1n9</span>成员<span class="hl">林爱星</span>于今日早晨6:00在<span class="hl">飞凰大酒店</span>坠楼，警方已封锁现场。</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><div class="card-avatar"><img src="../assets/images/avatars/lin_aixing_avatar.png"></div><div class="verified-name"><span class="hl">Spr1n9</span>_<span class="hl">林爱星</span><span class="verified-icon">V</span></div></div>
+                        <div class="post-text-body">新剧《致无畏的你》杀青啦！再见知遥~感谢剧组老师们，感谢遇见，也期待与大家见面！💪<br><img src="../assets/images/posts/lin_aixing_selca.png" class="post-img-main"></div>
+                    </div>
+                </div>
+                <div id="feed-profile" style="display:none;">
+                    <div class="card" style="text-align:center; padding: 30px 20px;"><div class="mini-avatar-camera" style="width:80px; height:80px; margin:0 auto;"><img src="../assets/images/avatars/jiuyue_camera_avatar.png"></div><h2 style="margin:10px 0;">久跃9私人侦探所</h2><div style="background:#f9f9f9; padding:15px; border-radius:8px; text-align:left; font-size:13px; color:#666; line-height:1.8; border:1px solid #eee; margin-bottom:20px;">专业背景调查、情感证据采集、失踪人口协查。<br>诚接各类私人调查业务，法律边缘的事，我们更专业。<br>「万物皆有裂痕，那是光照来的地方。」</div></div>
+                    <div class="card"><div class="post-text-body">期待。<div class="repost-style">@<span class="hl">Spr1n9</span>_<span class="hl">林爱星</span>：新剧《致无畏的你》杀青啦！再见知遥~感谢剧组老师们，感谢遇见，也期待与大家见面！💪</div></div></div>
+                    <div class="card"><div class="post-text-body">注意休息。<div class="repost-style">@<span class="hl">Spr1n9</span>_<span class="hl">林爱星</span>：今天的练习室日记！即使是凌晨三点，也要为了舞台努力呀！💪</div></div></div>
+                    <div class="card"><div class="post-text-body">北京的初春还是很冷，深夜下班记得穿厚点。<div class="repost-style">@<span class="hl">Spr1n9</span>_<span class="hl">林爱星</span>：收工！深夜的北京依然忙碌，但我知道总有一盏灯在等我。🏙️✨</div></div></div>
+                </div>
+            </div>
+            <div class="sidebar-right">
+                <div style="font-weight:bold; margin-bottom:15px; font-size: 15px;">微博热搜</div>
+                <div class="hot-item"><span class="hot-num top">1</span><span class="hot-text"><span class="hl">林爱星</span> 自杀</span></div>
+                <div class="hot-item"><span class="hot-num top">2</span><span class="hot-text"><span class="hl">spr1n9</span>道歉</span></div>
+                <div class="hot-item"><span class="hot-num">3</span><span class="hot-text">金偶像迷案第三部</span></div>
+                <div class="hot-item"><span class="hot-num">4</span><span class="hot-text">锈湖湖之仆从2026春季上线</span></div>
+                <div class="hot-item"><span class="hot-num">5</span><span class="hot-text">逆转裁判新作讯息</span></div>
+                <div class="hot-item"><span class="hot-num">6</span><span class="hot-text">typehelp大结局</span></div>
+                <div class="hot-item"><span class="hot-num">7</span><span class="hot-text">鲁特里一家</span></div>
+
+                <div id="interested-box" style="display:none; margin-top:25px;">
+                    <div style="font-weight:bold; margin-bottom:15px; font-size: 15px;">你可能感兴趣的人</div>
+                    <div style="font-size:13px;">
+                        <div style="display:flex; align-items:center; margin-bottom:12px;">
+                            <img src="../assets/images/avatars/xia_luyi_avatar.png" style="width:30px; height:30px; border-radius:50%; margin-right:10px; border:1px solid #eee;"> 
+                            <span class="hl">Spr1n9</span>_夏露一
+                        </div>
+                        <div style="display:flex; align-items:center; margin-bottom:12px;">
+                            <img src="../assets/images/avatars/zou_yun_avatar.png" style="width:30px; height:30px; border-radius:50%; margin-right:10px; border:1px solid #eee;"> 
+                            <span class="hl">Spr1n9</span>_邹耘
+                        </div>
+                        <div style="display:flex; align-items:center;">
+                            <img src="../assets/images/avatars/chen_sijia_avatar.png" style="width:30px; height:30px; border-radius:50%; margin-right:10px; border:1px solid #eee;"> 
+                            <span class="hl">Spr1n9</span>_陈思嘉
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function toggleView(view) {
+        // ... (保持你原有的 toggleView 代码不动)
+        const isP = (view === 'profile');
+        document.getElementById('feed-home').style.display = isP ? 'none' : 'block';
+        document.getElementById('feed-profile').style.display = isP ? 'block' : 'none';
+        document.getElementById('det-mini-sidebar').style.display = isP ? 'none' : 'block';
+        document.getElementById('profile-sidebar-links').style.display = isP ? 'block' : 'none';
+        document.getElementById('interested-box').style.display = isP ? 'block' : 'none';
+        
+        const newUrl = isP ? 'weibo.com/jiuyue9_detective' : 'weibo.com/home';
+        window.parent.postMessage({type: 'UPDATE_URL', displayUrl: newUrl}, '*');
+        
+        document.getElementById('feed-scroller').scrollTop = isP ? 0 : 180;
+    }
+
+    // 新增：监听主程序的后退指令
+    window.addEventListener('message', function(e) {
+        if (e.data.type === 'BROWSER_BACK') {
+            const profile = document.getElementById('feed-profile');
+            if (profile.style.display === 'block') {
+                // 如果在侦探主页，退回微博首页
+                toggleView('home');
+            } else {
+                // 已经在微博首页，告诉主程序退回起始页
+                window.parent.postMessage({type: 'GO_TO_START'}, '*');
+            }
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>林爱星的微博</title>
+<style>
+.post-image{
+    width:100%;
+    max-width:520px;
+    border-radius:10px;
+    margin-top:12px;
+    display:block;
+    object-fit:cover;
+    border:1px solid #eee;
+}
+    
+body{
+    margin:0;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f5f5f5;
+}
+
+.weibo-top{
+    height:56px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    font-size:14px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.back-btn{
+    cursor:pointer;
+    color:#666;
+    margin-right:20px;
+    font-weight:bold;
+}
+
+.back-btn:hover{
+    color:#ff8200;
+}
+
+.profile-header{
+    background:#fff;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    border-bottom:1px solid #eee;
+}
+
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #f2f2f2;
+}
+
+.name{
+    font-size:24px;
+    font-weight:bold;
+    color:#111;
+}
+
+.bio{
+    color:#666;
+    margin-top:8px;
+    line-height:1.8;
+    font-size:14px;
+}
+
+.feed{
+    width:700px;
+    margin:20px auto;
+}
+
+.post{
+    background:#fff;
+    padding:20px;
+    margin-bottom:16px;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+
+.post-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.post-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.post-name{
+    font-weight:bold;
+    font-size:15px;
+}
+
+.post-time{
+    color:#999;
+    font-size:12px;
+}
+
+.post-content{
+    line-height:1.9;
+    font-size:15px;
+    color:#222;
+}
+
+.post-img{
+    width:100%;
+    margin-top:12px;
+    border-radius:8px;
+}
+
+.repost-box{
+    margin-top:12px;
+    padding:12px 14px;
+    background:#f8f8f8;
+    border-radius:8px;
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+</style>
+</head>
+<body>
+
+<div class="weibo-top">
+    <span class="back-btn" onclick="goBack()">← 返回搜索结果</span>
+    微博
+</div>
+
+<div class="profile-header">
+    <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="avatar">
+    <div>
+        <div class="name">Spr1n9_林爱星</div>
+        <div class="bio">
+            Spr1n9成员 / Center / Vocal<br>
+            想成为能被记住很久的人 ✨
+        </div>
+    </div>
+</div>
+
+<div class="feed">
+
+        <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_林爱星</div>
+                <div class="post-time">2025-03-27 18:17</div>
+            </div>
+        </div>
+        <div class="post-content">
+            新剧《至无畏的你》杀青啦！再见知遥~感谢剧组老师们，感谢遇见，也期待与大家见面！ 💪
+        </div>
+        <img src="../../assets/images/posts/lin_aixing_selca.png" class="post-image">
+    </div>
+
+        <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_林爱星</div>
+                <div class="post-time">2025-03-26 03:16</div>
+            </div>
+        </div>
+        <div class="post-content">
+            今天的练习室日记！即使是凌晨三点，也要为了舞台努力呀！ 💪
+        </div>
+    </div>
+
+        <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_林爱星</div>
+                <div class="post-time">2026-03-25 23:04</div>
+            </div>
+        </div>
+        <div class="post-content">
+            收工！深夜的北京依然忙碌，但我知道总有一盏灯在等我。 🏙️✨
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_林爱星</div>
+                <div class="post-time">2026-03-24 01:08</div>
+            </div>
+        </div>
+        <div class="post-content">
+            最近总是收工得很晚。<br>
+            明明已经很累了，但还是会想，如果再坚持一点，是不是就会更好。<br>
+            晚安。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_林爱星</div>
+                <div class="post-time">2026-03-22 23:41</div>
+            </div>
+        </div>
+        <div class="post-content">
+            今天练习结束后在天台吹了很久的风。<br>
+            有时候会觉得，长大以后很多事情并不会变简单。<br>
+            但还是要继续往前走。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_林爱星</div>
+                <div class="post-time">2026-02-19 23:58</div>
+            </div>
+        </div>
+        <div class="post-content">
+            谢谢大家今天的生日祝福。<br>
+            希望新的一岁，能够更勇敢一点。<br>
+            也希望我爱的人都平安。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_林爱星</div>
+                <div class="post-time">2026-02-19 00:12</div>
+            </div>
+        </div>
+        <div class="post-content">
+            二十四岁了。<br>
+            有很多想做的事，也有很多还没来得及实现的心愿。<br>
+            希望今年会是更好的一年。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_林爱星</div>
+                <div class="post-time">2026-01-16 19:25</div>
+            </div>
+        </div>
+        <div class="post-content">
+            Dreaming Night 要来了。<br>
+            这次真的准备了很久很久，希望那天见到你们的时候，我会是最好的样子。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/lin_aixing_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_林爱星</div>
+                <div class="post-time">2025-12-28 22:17</div>
+            </div>
+        </div>
+        <div class="post-content">
+            转发微博
+            <div class="repost-box">
+                @Spr1n9官博：<br>
+                年末特别舞台《银河未眠》即将公开，和 Spr1n9 一起迎接冬夜里的星光吧。
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+
+<script>
+function goBack(){
+    window.parent.postMessage({
+        type:'NAVIGATE',
+        url:'pages/baidu_home.html',
+        displayUrl:'百度搜索'
+    },'*');
+}
+</script>
+
+</body>
+</html>

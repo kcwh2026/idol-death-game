@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陈思嘉的微博</title>
+<style>
+body{
+    margin:0;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f5f5f5;
+}
+
+.weibo-top{
+    height:56px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    font-size:14px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.back-btn{
+    cursor:pointer;
+    color:#666;
+    margin-right:20px;
+    font-weight:bold;
+}
+
+.back-btn:hover{
+    color:#ff8200;
+}
+
+.profile-header{
+    background:#fff;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    border-bottom:1px solid #eee;
+}
+
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #f2f2f2;
+}
+
+.name{
+    font-size:24px;
+    font-weight:bold;
+    color:#111;
+}
+
+.bio{
+    color:#666;
+    margin-top:8px;
+    line-height:1.8;
+    font-size:14px;
+}
+
+.feed{
+    width:700px;
+    margin:20px auto;
+}
+
+.post{
+    background:#fff;
+    padding:20px;
+    margin-bottom:16px;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+
+.post-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.post-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.post-name{
+    font-weight:bold;
+    font-size:15px;
+}
+
+.post-time{
+    color:#999;
+    font-size:12px;
+}
+
+.post-content{
+    line-height:1.9;
+    font-size:15px;
+    color:#222;
+}
+</style>
+</head>
+<body>
+
+<div class="weibo-top">
+    <span class="back-btn" onclick="goBack()">← 返回搜索结果</span>
+    微博
+</div>
+
+<div class="profile-header">
+    <img src="../../assets/images/avatars/chen_sijia_avatar.png" class="avatar">
+    <div>
+        <div class="name">Spr1n9_陈思嘉</div>
+        <div class="bio">
+            前 Spr1n9 成员 / Vocal<br>
+            暂时只想好好生活
+        </div>
+    </div>
+</div>
+
+<div class="feed">
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/chen_sijia_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_陈思嘉</div>
+                <div class="post-time">2026-03-04 23:18</div>
+            </div>
+        </div>
+        <div class="post-content">
+            很遗憾，要和大家说再见了。<br>
+            这个决定想了很久，也并不轻松。<br>
+            谢谢一路陪我走到这里的人。<br>
+            希望以后大家都能越来越好。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/chen_sijia_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_陈思嘉</div>
+                <div class="post-time">2026-02-26 01:42</div>
+            </div>
+        </div>
+        <div class="post-content">
+            有时候真相并不是大家看到的那样。<br>
+            只是很多话，现在还不能说。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/chen_sijia_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_陈思嘉</div>
+                <div class="post-time">2026-02-20 00:07</div>
+            </div>
+        </div>
+        <div class="post-content">
+            生日快乐。<br>
+            希望你真的开心。
+        </div>
+    </div>
+
+</div>
+
+<script>
+function goBack(){
+    window.parent.postMessage({
+        type:'NAVIGATE',
+        url:'pages/baidu_home.html',
+        displayUrl:'百度搜索'
+    },'*');
+}
+</script>
+
+</body>
+</html>

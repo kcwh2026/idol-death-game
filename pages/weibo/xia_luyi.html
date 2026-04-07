@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夏露一的微博</title>
+<style>
+body{
+    margin:0;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f5f5f5;
+}
+
+.weibo-top{
+    height:56px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    font-size:14px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.back-btn{
+    cursor:pointer;
+    color:#666;
+    margin-right:20px;
+    font-weight:bold;
+}
+
+.back-btn:hover{
+    color:#ff8200;
+}
+
+.profile-header{
+    background:#fff;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    border-bottom:1px solid #eee;
+}
+
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #f2f2f2;
+}
+
+.name{
+    font-size:24px;
+    font-weight:bold;
+    color:#111;
+}
+
+.bio{
+    color:#666;
+    margin-top:8px;
+    line-height:1.8;
+    font-size:14px;
+}
+
+.feed{
+    width:700px;
+    margin:20px auto;
+}
+
+.post{
+    background:#fff;
+    padding:20px;
+    margin-bottom:16px;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+
+.post-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.post-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.post-name{
+    font-weight:bold;
+    font-size:15px;
+}
+
+.post-time{
+    color:#999;
+    font-size:12px;
+}
+
+.post-content{
+    line-height:1.9;
+    font-size:15px;
+    color:#222;
+}
+
+.post-img{
+    width:100%;
+    margin-top:12px;
+    border-radius:8px;
+}
+</style>
+</head>
+<body>
+
+<div class="weibo-top">
+    <span class="back-btn" onclick="goBack()">← 返回搜索结果</span>
+    微博
+</div>
+
+<div class="profile-header">
+    <img src="../../assets/images/avatars/xia_luyi_avatar.png" class="avatar">
+    <div>
+        <div class="name">Spr1n9_夏露一</div>
+        <div class="bio">
+            Spr1n9成员 / 主舞 / Rap / 元气担当<br>
+            快乐小狗🐶 自拍狂魔 / 爱喝奶茶
+        </div>
+    </div>
+</div>
+
+<div class="feed">
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/xia_luyi_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_夏露一</div>
+                <div class="post-time">2026-03-31 23:14</div>
+            </div>
+        </div>
+        <div class="post-content">
+            今天排练到好晚🥹<br>
+            爱星又偷偷给我买了热奶茶。<br>
+            她总是这样，明明自己都没怎么休息。<br>
+            明天也要一起加油。
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/xia_luyi_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_夏露一</div>
+                <div class="post-time">2026-03-28 18:02</div>
+            </div>
+        </div>
+        <div class="post-content">
+            Dreaming Night真的真的好期待！！<br>
+            最近每天都在练习到凌晨。<br>
+            这次一定会是最棒的一场舞台✨
+        </div>
+    </div>
+    
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/xia_luyi_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_夏露一</div>
+                <div class="post-time">2026-03-05 10:16</div>
+            </div>
+        </div>
+        <div class="post-content">
+            昨天还在一起排练，今天就变成这样了。<br>
+            很舍不得，也有很多话没来得及说。<br>
+            希望你以后能过得轻松一点。<br>
+            嘉嘉，照顾好自己。💜
+        </div>
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <img src="../../assets/images/avatars/xia_luyi_avatar.png" class="post-avatar">
+            <div>
+                <div class="post-name">Spr1n9_夏露一</div>
+                <div class="post-time">2026-02-19 22:08</div>
+            </div>
+        </div>
+        <div class="post-content">
+            今天是我们星星的生日🎂<br>
+            永远是最温柔最漂亮的姐姐！<br>
+            希望你每天都开心。
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+function goBack(){
+    window.parent.postMessage({
+        type:'NAVIGATE',
+        url:'pages/xia_luyi_baike.html',
+        displayUrl:'百度搜索'
+    },'*');
+}
+</script>
+
+</body>
+</html>

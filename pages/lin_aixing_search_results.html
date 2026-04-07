@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林爱星 - 百度搜索</title>
+    <style>
+        .weibo-entry{
+            margin-top:14px;
+            padding:12px 14px;
+            background:#f8f8f8;
+            border:1px solid #e5e5e5;
+            border-radius:8px;
+            font-size:14px;
+            color:#315efb;
+            cursor:pointer;
+            text-align:center;
+            transition:0.2s;
+        }
+
+        .weibo-entry:hover{
+            background:#eef4ff;
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: #333;
+            background-color: #fff;
+            line-height: 1.6;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+        .hl { color: #c00; }
+
+        .highlight {
+            transition: background-color 0.2s ease-in-out;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .highlight:hover {
+            background-color: #ffeb3b;
+        }
+
+        .news-section-title { font-size: 18px; font-weight: bold; margin: 30px 0 15px 0; }
+        .news-card {
+            cursor: pointer;
+            margin-bottom: 25px;
+            max-width: 680px;
+            transition: background-color 0.2s;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .news-card:hover { background-color: #f9f9f9; }
+        .news-title {
+            font-size: 18px;
+            color: #0000cc;
+            text-decoration: underline;
+            margin-bottom: 5px;
+            display: inline-block;
+            font-weight: normal;
+        }
+        .news-title:hover { color: #315efb; }
+        .news-content {
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 4px;
+            line-height: 1.7;
+        }
+        .news-meta { font-size: 12px; color: #999; }
+
+        .baidu-baike-preview {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            max-width: 700px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .baidu-baike-preview:hover { background-color: #f9f9f9; }
+
+        .res-related-box {
+            background: #f5f6f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            max-width: 650px;
+        }
+        .related-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .related-item {
+            width: 45%;
+            font-size: 14px;
+            color: #0000cc;
+            cursor: pointer;
+        }
+        .related-item:hover { text-decoration: underline; }
+
+        .baike-top-nav {
+            padding: 12px 100px;
+            background: #f8f8f8;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+            color: #666;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .baike-header { padding: 20px 100px 0; }
+        .baike-title { font-size: 34px; font-weight: bold; }
+        .baike-content {
+            display: flex;
+            padding: 20px 100px;
+            gap: 40px;
+        }
+        .baike-section-title {
+            font-size: 22px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin: 30px 0 15px;
+            position: relative;
+        }
+        .baike-section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 60px;
+            height: 3px;
+            background: #3388ff;
+        }
+        .baike-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .baike-info-table td {
+            border: 1px solid #e1e1e1;
+            padding: 8px 12px;
+        }
+        .baike-label {
+            background: #f5f5f5;
+            width: 100px;
+            color: #666;
+        }
+
+        .universal-nav {
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 120px;
+            font-size: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+        .back-to-search {
+            color: #666;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        .back-to-search:hover { color: #2319dc; }
+
+        .main-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .a-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .a-title {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            color: #000;
+        }
+        .a-meta {
+            font-size: 13px;
+            color: #888;
+            display: flex;
+            gap: 20px;
+        }
+        .a-body {
+            font-size: 17px;
+            color: #222;
+            text-align: justify;
+        }
+        .a-body p {
+            margin-bottom: 20px;
+            text-indent: 2em;
+            line-height: 1.8;
+        }
+        .a-image-box {
+            text-align: center;
+            margin: 30px 0;
+            text-indent: 0 !important;
+        }
+        .a-image-box img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eaeaea;
+            background: #f9f9f9;
+        }
+        .a-image-caption {
+            font-size: 13px;
+            color: #999;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .sina-theme .media-header {
+            background-color: #d32f2f;
+            color: #fff;
+            padding: 12px 120px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .tencent-theme .media-header {
+            background-color: #fff;
+            color: #1976d2;
+            padding: 12px 120px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 2px solid #1976d2;
+        }
+        .magazine-theme .media-header {
+            background-color: #222;
+            color: #fff;
+            padding: 12px 120px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 800px) {
+            .baike-top-nav,
+            .baike-header,
+            .baike-content,
+            .universal-nav,
+            #lin-results {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+            .baike-content { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 搜索结果页 -->
+    <div id="lin-results" style="display:block; flex:1; background:#fff; overflow-y:auto; padding:20px 100px;">
+        <div class="universal-nav" style="position: sticky; top: 0; background: #fff; z-index: 10; margin: -20px -100px 20px; padding: 10px 100px;">
+            <span class="back-to-search" onclick="goBackToBaiduHome()">← 返回百度首页</span>
+        </div>
+
+        <div class="baidu-baike-preview" onclick="openLinBaike()">
+            <div style="width:120px; height:80px; background:#eee; flex-shrink:0; overflow:hidden;">
+                <img 
+                    src="../assets/images/posts/linaixing_diary2.png" 
+                    style="width:100%; height:100%; object-fit:cover; object-position: top;"
+                    onerror="this.style.display='none'"
+                >
+            </div>
+            <div>
+                <div>
+                    <span class="news-title" style="display:inline-block; margin-bottom:0;">林爱星</span>
+                    <span style="background:#0366d6; color:#fff; font-size:12px; padding:2px 6px; border-radius:4px; margin-left:8px; vertical-align:middle;">百度百科</span>
+                </div>
+                <div class="news-content">
+                    中国内地女歌手、演员，女子偶像团体<span class="highlight">Spr1n9</span>成员。代表作《银河未眠》《夏日心动公式》《至无畏的你》。出生于广州，自幼接受国际化教育。
+                </div>
+                <div style="color:#008000; font-size:13px; margin-top:5px;">baike.baidu.com/item/林爱星</div>
+            </div>
+        </div>
+
+        <div class="news-section-title">林爱星 的最新相关信息</div>
+
+        <div class="news-card" onclick="showLinArticle(1)">
+            <span class="news-title">林爱星专访：我一直都是被爱包围着长大的</span>
+            <div class="news-content">
+                林爱星在最新专访中首次谈及成长经历，提到父母给予自己充分支持，国际学校与海外升学背景也首次曝光。她表示，自己始终是“一个很幸运的人”……
+            </div>
+            <div class="news-meta">来源：人物周刊  2026-03-18</div>
+        </div>
+
+        <div class="news-card" onclick="showLinArticle(2)">
+            <span class="news-title">林爱星首次主演电视剧《至无畏的你》</span>
+            <div class="news-content">
+                林爱星首次担纲女主角，在都市青春剧《至无畏的你》中饰演新人记者“许知遥”。导演钱默群称其镜头表现“比想象中更细腻自然”……
+            </div>
+            <div class="news-meta">来源：新浪娱乐  2026-02-19</div>
+        </div>
+
+        <div class="news-card" onclick="showLinArticle(3)">
+            <span class="news-title">林爱星成长背景曝光：广州富裕家庭出身</span>
+            <div class="news-content">
+                据公开资料显示，林爱星父亲从事金融投资行业，母亲曾任艺术教育顾问。她中学阶段就读于广州国际学校，高中时期曾有海外交换经历……
+            </div>
+            <div class="news-meta">来源：腾讯娱乐  2026-01-20</div>
+        </div>
+
+        <div class="news-card" onclick="showLinArticle(4)">
+            <span class="news-title">林爱星《银河未眠》直拍播放破千万</span>
+            <div class="news-content">
+                凭借极强的镜头表现力与稳定的表情管理，林爱星个人直拍再次引发热议，不少网友评价其为“天生适合舞台的人”……
+            </div>
+            <div class="news-meta">来源：微博热视频  2025-12-14</div>
+        </div>
+
+        <div class="news-card" onclick="showLinArticle(5)">
+            <span class="news-title">林爱星出席Lumière品牌晚宴，白色礼服造型引热议</span>
+            <div class="news-content">
+                林爱星近日出席Lumière品牌晚宴，以一袭白色礼服亮相。现场生图曝光后，不少网友以“真正的千金感”形容其整体气质……
+            </div>
+            <div class="news-meta">来源：时尚芭莎  2026-01-03</div>
+        </div>
+
+        <div class="news-card" onclick="showLinArticle(6)">
+            <span class="news-title">林爱星童年照片曝光，从小就是小公主</span>
+            <div class="news-content">
+                网友整理出林爱星早年钢琴比赛及家庭活动照片，认为其成长环境优越、气质出众，不少粉丝称其“像是在爱里长大的小孩”……
+            </div>
+            <div class="news-meta">来源：网易娱乐  2025-11-06</div>
+        </div>
+
+        <div class="res-related-box">
+            <div style="font-weight:bold; border-bottom:1px solid #ddd; padding-bottom:12px; font-size:16px;">林爱星作品</div>
+            <div class="related-grid">
+                <span class="related-item">银河未眠</span>
+                <span class="related-item">夏日心动公式</span>
+                <span class="related-item">Dream Start</span>
+                <span class="related-item">至无畏的你</span>
+                <span class="related-item">六月风铃</span>
+                <span class="related-item">云朵写给海的信</span>
+            </div>
+        </div>
+
+        <div class="res-related-box">
+            <div style="font-weight:bold; border-bottom:1px solid #ddd; padding-bottom:12px; font-size:16px;">相关视频</div>
+            <div class="related-grid">
+                <span class="related-item">银河未眠 林爱星直拍</span>
+                <span class="related-item">林爱星ending合集</span>
+                <span class="related-item">生日直播切片</span>
+                <span class="related-item">至无畏的你预告</span>
+            </div>
+        </div>
+
+        <div class="res-related-box">
+            <div style="font-weight:bold; border-bottom:1px solid #ddd; padding-bottom:12px; font-size:16px;">相关图片</div>
+            <div class="related-grid">
+                <span class="related-item">舞台造型图</span>
+                <span class="related-item">童年照片</span>
+                <span class="related-item">家庭合照</span>
+                <span class="related-item">品牌活动生图</span>
+            </div>
+        </div>
+
+        <div class="res-related-box">
+            <div style="font-weight:bold; border-bottom:1px solid #ddd; padding-bottom:12px; font-size:16px;">相关搜索</div>
+            <div class="related-grid">
+                <span class="related-item">林爱星 家庭背景</span>
+                <span class="related-item">林爱星 国际学校</span>
+                <span class="related-item">林爱星 父母</span>
+                <span class="related-item">林爱星 钱默群</span>
+                <span class="related-item">林爱星 童年照</span>
+                <span class="related-item">林爱星 直拍</span>
+                <span class="related-item">林爱星 为什么去世</span>
+                <span class="related-item">林爱星 遗书</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 百科页 -->
+    <div id="lin-baike-wrapper" style="display:none; flex:1; background:#fff; overflow-y:auto; flex-direction:column;">
+        <div class="baike-top-nav">
+            <span class="back-to-search" onclick="backToLinResults()">← 返回搜索结果</span> &nbsp;|&nbsp; 首页 | 百度百科 | 特色百科 | 知识专题 | 个人中心
+        </div>
+
+        <div class="baike-header">
+            <div class="baike-title">林爱星</div>
+            <div style="color:#666; font-size:14px; margin-top:5px;">中国内地女歌手、演员，Spr1n9成员</div>
+        </div>
+
+        <div class="baike-content">
+            <div style="flex:1;">
+                <p style="text-indent:2em; line-height:1.8;">
+                    <span class="highlight">林爱星</span>，<span class="highlight"></span>2002年2月19日</span>出生于中国广州，中国内地流行乐女歌手、演员，女子偶像团体<span class="highlight">Spr1n9</span>成员，队内担任门面、Center、主唱。2023年5月，随组合正式出道。凭借清新甜美的外形、稳定细腻的舞台表现及温柔亲和的个人气质获得广泛关注。除团体活动外，林爱星亦积极尝试影视领域发展，于2026年参演都市青春题材电视剧《至无畏的你》。
+                </p>
+
+                <div class="baike-section-title">基本信息</div>
+                <table class="baike-info-table">
+                    <tr>
+                        <td class="baike-label">中文名</td><td>林爱星</td>
+                        <td class="baike-label">出生地</td><td>中国广州</td>
+                    </tr>
+                    <tr>
+                        <td class="baike-label">出生日期</td><td>2002年2月19日</td>
+                        <td class="baike-label">职业</td><td>歌手、演员</td>
+                    </tr>
+                    <tr>
+                        <td class="baike-label">所属组合</td><td>Spr1n9</td>
+                        <td class="baike-label">经纪公司</td><td>FD Entertainment</td>
+                    </tr>
+                    <tr>
+                        <td class="baike-label">队内定位</td><td colspan="3">门面 / Center / 主唱</td>
+                    </tr>
+                </table>
+
+                <div class="baike-section-title">个人喜好</div>
+                <ul style="font-size:14px; line-height:2;">
+                    <li>英文名：<span class="highlight">Alice</span></li>
+                    <li>昵称：星星</li>
+                    <li>最喜欢的数字：<span class="highlight">7</span></li>
+                    <li>幸运色：蜜桃粉（<span class="highlight">Momo Pink</span>）</li>
+                    <li>最喜欢的花：芍药</li>
+                </ul>
+
+                <div class="baike-section-title">人物经历</div>
+                <p style="line-height:1.9;">林爱星出生于广州一个重视教育与艺术培养的家庭。父亲从事金融投资相关工作，母亲曾任高校艺术教育顾问。受家庭环境影响，她自幼接触钢琴、芭蕾与声乐训练。中学阶段就读于广州某国际学校，高中时期曾赴英国参加短期交换项目。其后虽一度获得海外大学录取机会，但因对舞台表演抱有强烈热爱，最终选择回国进入演艺行业。</p>
+
+                <div class="baike-section-title">家庭背景</div>
+                <p style="line-height:1.9;">在公开采访中，林爱星曾多次提到，自己从小在一个充满理解与尊重的家庭环境中长大。父母始终支持她学习艺术、尝试舞台与表演方向，也尊重她对未来的所有选择。她因此被不少粉丝称为“在爱里长大的小孩”。</p>
+
+                <div class="baike-section-title">主要作品</div>
+                <ul style="font-size:14px; line-height:2;">
+                    <li>《Dream Start》</li>
+                    <li>《星轨告白》</li>
+                    <li>《夏日心动公式》</li>
+                    <li>《银河未眠》</li>
+                    <li>《未完成心愿》</li>
+                    <li>《至无畏的你》</li>
+                    <li>《六月风铃》</li>
+                    <li>《云朵写给海的信》</li>
+                </ul>
+
+                <div class="baike-section-title">相关新闻事件</div>
+                <p style="font-size:14px; line-height:1.9; text-indent:0;">
+                    <b>2026年1月21日：</b>林爱星首次主演的电视剧《至无畏的你》释出角色海报，引发热议。
+                </p>
+                <p style="font-size:14px; line-height:1.9; text-indent:0;">
+                    <b>2026年4月1日：</b>FD Entertainment发布官方公告，确认林爱星于今日清晨不幸离世。
+                </p>
+            </div>
+
+            <div style="width:260px;">
+                <div style="border:1px solid #ddd; padding:5px;">
+                    <img src="../assets/images/posts/linaixing_diary2.png" style="width:100%;" onerror="this.style.display='none'">
+                    <p style="font-size:12px; color:#999; text-align:center; margin-top:5px;">林爱星公开活动照片</p>
+                </div>
+
+                <div class="weibo-entry" onclick="openLinAixingWeibo()">
+                    林爱星微博主页
+                </div>
+
+                <div style="margin-top:20px; background:#f8f8f8; padding:15px; font-size:12px; line-height:2;">
+                    <b>词条统计</b><br>
+                    浏览次数：21354688次<br>
+                    编辑次数：982次<br>
+                    最近更新：2026-04-06
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文章详情页 -->
+    <div id="lin-article-view" style="display:none; flex:1; background:#fff; overflow-y:auto;">
+        <div class="universal-nav">
+            <span class="back-to-search" onclick="hideLinArticle()">← 返回林爱星搜索结果</span>
+        </div>
+        <div id="lin-dynamic-content"></div>
+    </div>
+
+    <script>
+        function goBackToBaiduHome() {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/baidu_home.html',
+                displayUrl: '百度'
+            }, '*');
+        }
+
+        function openLinBaike() {
+            document.getElementById('lin-results').style.display = 'none';
+            document.getElementById('lin-baike-wrapper').style.display = 'flex';
+            document.getElementById('lin-baike-wrapper').scrollTop = 0;
+        }
+
+        function backToLinResults() {
+            document.getElementById('lin-baike-wrapper').style.display = 'none';
+            document.getElementById('lin-results').style.display = 'block';
+        }
+
+        function openLinAixingWeibo() {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/weibo/lin_aixing.html',
+                displayUrl: '微博'
+            }, '*');
+        }
+
+        function showLinArticle(articleId) {
+            document.getElementById('lin-results').style.display = 'none';
+            document.getElementById('lin-article-view').style.display = 'block';
+            renderLinArticle(articleId);
+            document.getElementById('lin-article-view').scrollTop = 0;
+        }
+
+        function hideLinArticle() {
+            document.getElementById('lin-article-view').style.display = 'none';
+            document.getElementById('lin-results').style.display = 'block';
+            document.getElementById('lin-dynamic-content').innerHTML = '';
+        }
+
+        function renderLinArticle(id) {
+            const container = document.getElementById('lin-dynamic-content');
+            let htmlContent = '';
+
+            switch(id) {
+                case 1:
+                    htmlContent = `
+                        <div class="magazine-theme">
+                            <div class="media-header">人物周刊</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">林爱星：我一直都是被爱包围着长大的</div>
+                                    <div class="a-meta"><span>来源：人物周刊</span><span>时间：2026年3月18日</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>在最新一期专访中，林爱星首次较为完整地谈到了自己的成长经历。她表示，自己从小生活在一个重视教育也尊重个人选择的家庭中，父母不会强迫她成为什么样的人，而是鼓励她尝试所有真正热爱的事情。</p>
+                                    <p>“我觉得我从小是一个被照顾得很好的人，所以会比较自然地想去照顾别人。”谈到家庭对自己性格的影响时，林爱星这样说道。她回忆称，小时候不管是学习钢琴、跳芭蕾，还是后来决定走上舞台道路，父母都始终给予充分理解和支持。</p>
+                                    <p>林爱星中学阶段就读于广州国际学校，高中时期曾有赴英国交换的经历。她坦言，自己原本也认真考虑过海外升学道路，家里同样为此做过规划，“但后来还是觉得，最喜欢的事情是舞台，所以就回来了。”</p>
+                                    <p>对于“幸运”这个词，她没有回避。“我觉得我是幸运的人。我身边一直有很爱我的家人、朋友，还有支持我的粉丝，所以很多时候会觉得，自己应该把得到的爱再传递出去。”</p>
+                                    <p>采访最后，林爱星对粉丝说道：“谢谢你们让我觉得，这个世界上真的有人会因为我的存在而开心。我会努力成为不让大家失望的人。”</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 2:
+                    htmlContent = `
+                        <div class="sina-theme">
+                            <div class="media-header">新浪娱乐</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">林爱星首次主演电视剧《至无畏的你》</div>
+                                    <div class="a-meta"><span>来源：新浪娱乐</span><span>时间：2026年2月19日</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>都市青春题材电视剧《至无畏的你》近日公开首批角色物料，林爱星将在剧中饰演女主角<span class="highlight">“许知遥”</span>。这是她首次以主演身份完整参与电视剧项目，也意味着其正式开启影视方向尝试。</p>
+                                    <p>《至无畏的你》讲述了一群年轻人在都市生活中面对理想、爱情与自我认同的成长故事。林爱星饰演的许知遥是一位外表温柔、内心坚定的新人记者，在不断追寻新闻理想的过程中重新理解勇气与选择的意义。</p>
+                                    <p>制作方表示，林爱星在试读剧本阶段便展现出与角色高度契合的气质。导演钱默群也称赞她“镜头感非常自然，情绪表达细腻”。</p>
+                                    <p>不少粉丝认为，这次角色设定与她以往甜美元气的舞台形象形成了新鲜反差，也让人更加期待她在演员身份上的未来发展。</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 3:
+                    htmlContent = `
+                        <div class="tencent-theme">
+                            <div class="media-header">腾讯娱乐</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">林爱星成长背景曝光：广州富裕家庭出身</div>
+                                    <div class="a-meta"><span>来源：腾讯娱乐</span><span>时间：2026年1月20日</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>据公开资料显示，林爱星出生于广州一个重视教育与艺术培养的家庭。其父亲从事金融投资相关工作，母亲则长期从事艺术教育领域。受家庭环境影响，她自幼接触钢琴、芭蕾与声乐训练，成长轨迹相当优越。</p>
+                                    <p>中学阶段，林爱星就读于广州国际学校，高中时期曾赴英国参加短期交换项目。其后虽一度获得海外大学录取机会，但因对舞台表演抱有浓厚兴趣，最终选择回国进入演艺行业。</p>
+                                    <p>在过往采访中，林爱星也曾提到，父母始终尊重她的选择，并在精神上给予充分理解与鼓励。这样的成长背景，也让不少网友评价她“有一种很自然的被爱感”。</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 4:
+                    htmlContent = `
+                        <div class="sina-theme">
+                            <div class="media-header">微博热视频</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">林爱星《银河未眠》直拍播放破千万</div>
+                                    <div class="a-meta"><span>来源：微博热视频</span><span>时间：2025年12月14日</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>在近期公开的《银河未眠》舞台直拍中，林爱星凭借稳定的表情管理与极强的镜头感再次引发关注。相关直拍视频上线后播放量迅速突破千万，不少网友称其为“天生适合舞台的人”。</p>
+                                    <p>从开场近景镜头到副歌部分的主唱段落，林爱星在表情、眼神和动作节奏上均展现出较强的舞台完成度。尤其是ending镜头中极具辨识度的神态变化，被粉丝反复剪辑传播。</p>
+                                    <p>有业内观察指出，林爱星之所以在直拍传播上始终占据优势，与其细腻自然的镜头反应能力密切相关。这也使她在团体舞台外，持续拥有极强的个人传播表现。</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 5:
+                    htmlContent = `
+                        <div class="magazine-theme">
+                            <div class="media-header">时尚芭莎</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">林爱星出席Lumière品牌晚宴，白色礼服造型引热议</div>
+                                    <div class="a-meta"><span>来源：时尚芭莎</span><span>时间：2026年1月3日</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>林爱星近日受邀出席Lumière品牌晚宴，以一袭白色礼服亮相现场。活动照片曝光后，不少网友用“真正的千金感”来形容她当晚的整体状态。</p>
+                                    <p>不同于舞台上的甜美元气氛围，此次造型更偏向优雅克制路线。简洁的剪裁与珍珠饰品搭配，使其整体气质显得格外清透，不少粉丝评价这是一种“没有攻击性的高级感”。</p>
+                                    <p>品牌方也在活动后公开表示，林爱星在镜头前拥有极高的完成度与辨识度，是兼具亲和力与时尚表现力的新生代艺人代表之一。</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 6:
+                    htmlContent = `
+                        <div class="official-theme">
+                            <div class="media-header">网易娱乐</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">林爱星童年照片曝光，从小就是小公主</div>
+                                    <div class="a-meta"><span>来源：网易娱乐</span><span>时间：2025年11月6日</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>近日，有网友整理出林爱星早年钢琴比赛及家庭活动相关照片，引发广泛讨论。从公开画面来看，林爱星童年时期便已展现出十分出众的气质与镜头感。</p>
+                                    <p>有粉丝表示，从这些旧照中能够明显感受到她成长环境的优渥与家庭氛围的温暖，也难怪她长大后始终带有一种自然、柔和而不防备的气质。</p>
+                                    <p>不少人看完后留言表示：“一看就是从小被爱着长大的小孩”“真的像小公主一样”。</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+
+            container.innerHTML = htmlContent;
+        }
+
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'BROWSER_BACK') {
+                if (document.getElementById('lin-article-view').style.display === 'block') {
+                    hideLinArticle();
+                } else if (document.getElementById('lin-baike-wrapper').style.display === 'flex') {
+                    backToLinResults();
+                } else if (document.getElementById('lin-results').style.display === 'block') {
+                    goBackToBaiduHome();
+                }
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('mail_linqinnan_triggered') !== '1') {
+                localStorage.setItem('mail_linqinnan_triggered', '1');
+
+                setTimeout(() => {
+                    window.parent.postMessage({
+                        type: 'NEW_MAIL',
+                        mailKey: 'linqinnan'
+                    }, '*');
+                }, 1200);
+            }
+        });
+        
+    </script>
+</body>
+</html>

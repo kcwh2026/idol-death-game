@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FD Entertainment - 官方网站</title>
+    <style>
+        :root {
+            --text-main: #1f1f1f;
+            --text-sub: #666;
+            --line: #e9e9e9;
+            --bg: #f6f7fb;
+            --card: #fff;
+            --accent: #111;
+            --accent-soft: #f2f4f8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--text-main);
+            background: var(--bg);
+            line-height: 1.75;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+
+        .brand small {
+            display: block;
+            font-size: 11px;
+            color: var(--text-sub);
+            font-weight: 500;
+            letter-spacing: 1.2px;
+            margin-top: 2px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 24px;
+            color: var(--text-sub);
+            font-size: 14px;
+        }
+
+        .nav span {
+            cursor: default;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #111 0%, #242b38 55%, #3e4658 100%);
+            color: #fff;
+            padding: 72px 32px 84px;
+        }
+
+        .hero-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        .hero-sub {
+            font-size: 13px;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin-bottom: 18px;
+        }
+
+        .hero-title {
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 14px;
+        }
+
+        .hero-title small {
+            display: block;
+            font-size: 18px;
+            font-weight: 500;
+            opacity: 0.75;
+            margin-top: 10px;
+        }
+
+        .hero-text {
+            max-width: 760px;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .page {
+            max-width: 1120px;
+            margin: -42px auto 0;
+            padding: 0 24px 48px;
+        }
+
+        .section {
+            background: var(--card);
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 28px 28px 30px;
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            position: relative;
+            padding-left: 14px;
+        }
+
+        .section-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 4px;
+            height: 24px;
+            background: #111;
+            border-radius: 999px;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+
+        .intro-card {
+            background: var(--accent-soft);
+            border-radius: 18px;
+            padding: 22px 20px;
+        }
+
+        .intro-card h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .intro-card p {
+            margin: 0;
+            color: var(--text-sub);
+            font-size: 15px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .data-box {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 18px 16px;
+            background: #fff;
+        }
+
+        .data-label {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        .data-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .biz-card {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 22px 18px;
+            background: #fff;
+        }
+
+        .biz-card h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .biz-card p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-sub);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .team-card {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .team-role {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+        }
+
+        .team-name {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .team-desc {
+            color: var(--text-sub);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .highlight {
+            transition: background-color 0.2s ease;
+            border-radius: 4px;
+            padding: 0 2px;
+            cursor: help;
+        }
+
+        .highlight:hover {
+            background: #ffeb3b;
+            color: #000;
+        }
+
+        .artist-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .artist-card {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .artist-photo {
+            height: 180px;
+            overflow: hidden;
+            border-bottom: 1px solid #eee;
+        }
+
+        .artist-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            display: block;
+        }
+
+        .artist-info {
+            padding: 16px;
+        }
+
+        .artist-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .artist-role {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        .artist-desc {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin: 0;
+        }
+
+        .news-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .news-item {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: #fff;
+            padding: 18px;
+        }
+
+        .news-date {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+        }
+
+        .news-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .news-text {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin: 0;
+        }
+
+        .footer {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 8px 32px 42px;
+            color: var(--text-sub);
+            font-size: 13px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .contact-box {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 18px;
+            background: #fff;
+        }
+
+        .contact-box h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+        }
+
+        .contact-box p {
+            margin: 0;
+            color: var(--text-sub);
+            font-size: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                padding: 54px 20px 64px;
+            }
+
+            .hero-title {
+                font-size: 38px;
+            }
+
+            .page {
+                padding: 0 16px 36px;
+            }
+
+            .section {
+                padding: 22px 18px 24px;
+            }
+
+            .intro-grid,
+            .business-grid,
+            .team-grid,
+            .artist-grid,
+            .contact-grid,
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 12px 16px;
+            }
+
+            .nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="brand">
+            FD Entertainment
+            <small>FOR DREAM</small>
+        </div>
+        <div class="nav">
+            <span>公司简介</span>
+            <span>业务板块</span>
+            <span>管理层</span>
+            <span>艺人</span>
+            <span>新闻中心</span>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-sub">FOR DREAM · OFFICIAL WEBSITE</div>
+            <div class="hero-title">
+                FD Entertainment
+                <small>Dream Beyond Reality</small>
+            </div>
+            <div class="hero-text">
+                FD Entertainment 是一家以偶像经纪、音乐制作、影视开发及商业内容运营为核心的综合型娱乐公司。公司长期专注于青年偶像与艺人培养体系建设，致力于打造兼具市场影响力与持续成长性的文化内容品牌。
+            </div>
+        </div>
+    </section>
+
+    <main class="page">
+        <section class="section">
+            <div class="section-title">公司概况</div>
+            <div class="intro-grid">
+                <div class="intro-card">
+                    <h3>关于 FD</h3>
+                    <p>
+                        FD Entertainment（FOR DREAM）成立于 2020 年，总部位于 B 市临港文化产业园。公司业务涵盖艺人经纪、团体运营、影视项目开发、品牌商务合作及练习生培养，现已形成以偶像内容为核心、向影视与商业市场延伸的发展结构。
+                    </p>
+                </div>
+                <div class="intro-card">
+                    <h3>经营理念</h3>
+                    <p>
+                        以系统化训练与市场化运营并行的方式，构建可长期发展的艺人生态。公司强调“舞台表现、形象管理、商业转化、跨媒介内容能力”四位一体的发展路径。
+                    </p>
+                </div>
+            </div>
+
+            <div class="data-grid">
+                <div class="data-box">
+                    <div class="data-label">成立时间</div>
+                    <div class="data-value">2020</div>
+                </div>
+                <div class="data-box">
+                    <div class="data-label">总部地点</div>
+                    <div class="data-value">B 市</div>
+                </div>
+                <div class="data-box">
+                    <div class="data-label">旗下团体</div>
+                    <div class="data-value">4 组</div>
+                </div>
+                <div class="data-box">
+                    <div class="data-label">练习生体系</div>
+                    <div class="data-value">开放中</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">业务板块</div>
+            <div class="business-grid">
+                <div class="biz-card">
+                    <h3>艺人经纪</h3>
+                    <p>面向团体与个人艺人的全周期经纪管理，涵盖定位策划、行程运营、舞台项目与公众形象维护。</p>
+                </div>
+                <div class="biz-card">
+                    <h3>音乐与舞台制作</h3>
+                    <p>提供单曲、专辑、概念企划、舞台视觉与现场表演制作，持续强化团体的内容辨识度与商业化表现。</p>
+                </div>
+                <div class="biz-card">
+                    <h3>影视与商业开发</h3>
+                    <p>推动艺人参与影视剧、短剧、综艺及品牌合作项目，建立由偶像舞台向多元内容延伸的发展路径。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">管理层</div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-role">董事长 / 创始合伙人</div>
+                    <div class="team-name"><span class="highlight">周人杰</span></div>
+                    <p class="team-desc">
+                    负责公司整体战略布局、资本运作与核心项目投资，主导艺人经纪体系及关联文娱产业资源整合。
+                    名下同时持有多家文化传媒及<span class="highlight">酒店</span>管理公司股份。
+                    </p>
+                </div>
+                <div class="team-card">
+                    <div class="team-role">艺人经纪总监</div>
+                    <div class="team-name"><span class="highlight">许岚</span></div>
+                    <p class="team-desc">
+                        负责团体项目统筹、艺人日常经纪、品牌合作与舆情管理。参与多个女团及个人艺人的长期发展规划与形象管理。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">旗下艺人</div>
+            <div class="artist-grid">
+                <div class="artist-card">
+                    <div class="artist-photo">
+                    <img src="../assets/images/posts/spr1n9_hezhao.png">
+                    </div>
+                    <div class="artist-info">
+                        <div class="artist-name">Spr1n9</div>
+                        <div class="artist-role">四人女子偶像团体</div>
+                        <p class="artist-desc">以梦境、星光、成长系青春为主要概念，兼具舞台表现力与视觉辨识度。</p>
+                    </div>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-photo">
+                    <img src="../assets/images/posts/linaixing_diary3.png">
+                    </div>
+                    <div class="artist-info">
+                        <div class="artist-name">林爱星</div>
+                        <div class="artist-role">Center / 主唱</div>
+                        <p class="artist-desc">以甜感外形与稳定舞台表现受到关注，同时参与影视方向项目拓展。</p>
+                    </div>
+                </div>
+                <div class="artist-card">
+                     <div class="artist-photo">
+                    <img src="../assets/images/posts/zou_yun_diary.png">
+                    </div>
+                    <div class="artist-info">
+                        <div class="artist-name">邹耘</div>
+                        <div class="artist-role">队长 / 主舞</div>
+                        <p class="artist-desc">以成熟舞台控制力和队内核心协调能力见长，是团体的重要支撑成员。</p>
+                    </div>
+                </div>
+                <div class="artist-card">
+                     <div class="artist-photo">
+                    <img src="../assets/images/posts/xia_luyi_diary.png">
+                    </div>
+                    <div class="artist-info">
+                        <div class="artist-name">夏露一</div>
+                        <div class="artist-role">主舞 / Rap</div>
+                        <p class="artist-desc">综艺感与镜头表现突出，在短视频平台及团体花絮内容中拥有较高传播度。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">新闻中心</div>
+            <div class="news-list">
+                <div class="news-item">
+                    <div class="news-date">2026.02.10</div>
+                    <div class="news-title">FD Entertainment 公布 2026 年度艺人发展计划</div>
+                    <p class="news-text">
+                        公司将继续推动音乐、影视与商业合作并行发展，并计划扩充训练体系与内容制作团队。
+                    </p>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">2026.02.19</div>
+                    <div class="news-title">Spr1n9 成员个人影视项目《至无畏的你》公布首批物料</div>
+                    <p class="news-text">
+                        公司表示将持续拓展艺人跨媒介发展机会，推动舞台型偶像向综合型艺人方向成长。
+                    </p>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">2026.03.05</div>
+                    <div class="news-title">FD Entertainment 公告：成员陈思嘉因个人升学规划调整后续活动安排</div>
+                    <p class="news-text">
+                        公司称将尊重艺人个人选择，并根据项目实际情况协调后续团体运营与公开活动计划。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">联系信息</div>
+            <div class="contact-grid">
+                <div class="contact-box">
+                    <h3>总部地址</h3>
+                    <p>B 市临港新区星河文化产业园 A 栋 17F</p>
+                </div>
+                <div class="contact-box">
+                    <h3>商务合作</h3>
+                    <p>business@fd-ent.com</p>
+                </div>
+                <div class="contact-box">
+                    <h3>媒体联系</h3>
+                    <p>press@fd-ent.com</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="footer">
+        © 2026 FD Entertainment（FOR DREAM） All Rights Reserved.
+    </div>
+
+    <script>
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'BROWSER_BACK') {
+                window.parent.postMessage({
+                    type: 'NAVIGATE',
+                    url: 'pages/baidu_home.html',
+                    displayUrl: '百度搜索'
+                }, '*');
+            }
+        });
+    </script>
+</body>
+</html>

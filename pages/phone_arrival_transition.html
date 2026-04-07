@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手机送达</title>
+    <style>
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            position: relative;
+        }
+
+        .message {
+            color: rgba(255,255,255,0);
+            font-size: 30px;
+            letter-spacing: 2px;
+            text-align: center;
+            animation: fadeInText 2s ease forwards;
+            animation-delay: 1.8s;
+        }
+
+        @keyframes fadeInText {
+            0% {
+                opacity: 0;
+                color: rgba(255,255,255,0);
+                transform: translateY(8px);
+            }
+            100% {
+                opacity: 1;
+                color: rgba(255,255,255,0.92);
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .message {
+                font-size: 22px;
+                padding: 0 24px;
+                line-height: 1.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="screen">
+        <div class="message">林爱星的手机送到了……</div>
+    </div>
+
+    <audio id="knock-sound" preload="auto">
+        <source src="../assets/audio/door_knock.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const knock = document.getElementById('knock-sound');
+
+        window.addEventListener('load', () => {
+            // 先播放敲门声
+            knock.play().catch(() => {});
+
+            // 约 5 秒后自动跳转到手机页面
+            setTimeout(() => {
+                window.parent.postMessage({
+                    type: 'NAVIGATE',
+                    url: 'pages/phone/linaixing_phone_lock.html',
+                    displayUrl: '林爱星的手机'
+                }, '*');
+            }, 5000);
+        });
+
+        // 浏览器返回：回到邮件
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'BROWSER_BACK') {
+                window.parent.postMessage({
+                    type: 'NAVIGATE',
+                    url: 'pages/ouming_mail.html',
+                    displayUrl: '邮件'
+                }, '*');
+            }
+        });
+    </script>
+</body>
+</html>

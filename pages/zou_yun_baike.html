@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>邹耘_百度百科</title>
+<style>
+
+.weibo-entry{
+    margin-top:14px;
+    padding:12px 14px;
+    background:#f8f8f8;
+    border:1px solid #e5e5e5;
+    border-radius:8px;
+    font-size:14px;
+    color:#315efb;
+    cursor:pointer;
+    text-align:center;
+    transition:0.2s;
+}
+
+.weibo-entry:hover{
+    background:#eef4ff;
+}
+
+.baike-top-nav{
+    height:42px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:0 40px;
+    background:#f8f8f8;
+    border-bottom:1px solid #eee;
+    font-size:13px;
+    color:#666;
+}
+
+.nav-link{
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.nav-link:hover{
+    color:#3388ff;
+}
+
+.divider{
+    color:#ccc;
+}
+
+body{
+    margin:0;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#fff;
+    color:#333;
+}
+.highlight{
+    transition:background-color 0.2s;
+    border-radius:4px;
+    padding:0 2px;
+    cursor:help;
+}
+.highlight:hover{
+    background:#ffeb3b;
+    color:#000;
+}
+.top-nav{
+    padding:14px 100px;
+    background:#f8f8f8;
+    border-bottom:1px solid #eee;
+    font-size:13px;
+    color:#666;
+}
+.baike-header{
+    padding:24px 100px 0;
+}
+.baike-title{
+    font-size:34px;
+    font-weight:bold;
+}
+.baike-content{
+    display:flex;
+    padding:24px 100px;
+    gap:40px;
+}
+.baike-main{
+    flex:1;
+}
+.baike-side{
+    width:260px;
+}
+.section-title{
+    font-size:22px;
+    font-weight:bold;
+    margin:30px 0 14px;
+    border-bottom:1px solid #ddd;
+    padding-bottom:6px;
+}
+.info-table{
+    width:100%;
+    border-collapse:collapse;
+}
+.info-table td{
+    border:1px solid #eee;
+    padding:8px 12px;
+    font-size:14px;
+}
+.label{
+    background:#f8f8f8;
+    width:100px;
+    color:#666;
+}
+</style>
+</head>
+<body>
+
+<div class="baike-top-nav">
+    <span onclick="goBackSearch()" class="nav-link">← 返回百度首页</span>
+    <span class="divider">|</span>
+    <span class="nav-link">首页</span>
+    <span class="nav-link">百度百科</span>
+    <span class="nav-link">特色百科</span>
+    <span class="nav-link">知识专题</span>
+    <span class="nav-link">个人中心</span>
+</div>
+
+<div class="top-nav">
+    百度百科 ＞ 人物 ＞ 偶像艺人
+</div>
+
+<div class="baike-header">
+    <div class="baike-title">邹耘</div>
+    <div style="color:#666;font-size:14px;margin-top:6px;">
+        中国内地女歌手、Spr1n9 队长
+    </div>
+</div>
+
+<div class="baike-content">
+    <div class="baike-main">
+
+        <p style="line-height:1.9;text-indent:2em;">
+            <span class="highlight">邹耘</span>，2001年7月16日出生，
+            中国内地女歌手、舞者，
+            女子团体 <span class="highlight">Spr1n9</span> 队长。
+            团内定位为主舞及气氛担当，
+            以稳定成熟的舞台控制力著称。
+        </p>
+
+        <div class="section-title">基本信息</div>
+
+        <table class="info-table">
+            <tr>
+                <td class="label">中文名</td>
+                <td>邹耘</td>
+                <td class="label">英文名</td>
+                <td>Yun</td>
+            </tr>
+            <tr>
+                <td class="label">出生日期</td>
+                <td>2001年7月16日</td>
+                <td class="label">职业</td>
+                <td>歌手 / 舞者</td>
+            </tr>
+            <tr>
+                <td class="label">所属组合</td>
+                <td>Spr1n9</td>
+                <td class="label">定位</td>
+                <td>队长 / 主舞</td>
+            </tr>
+        </table>
+
+        <div class="section-title">人物经历</div>
+
+        <p><b>2023年</b> 正式以 Spr1n9 队长身份出道。</p>
+        <p><b>2024年</b> 多次参与团体大型拼盘舞台与年末特别舞台。</p>
+        <p><b>2026年</b> 在组合风波后负责大部分对外回应。</p>
+
+        <div class="section-title">个人喜好</div>
+
+        <ul style="line-height:2;">
+            <li>昵称：云姐</li>
+            <li>最喜欢的数字：<span class="highlight">3</span></li>
+            <li>幸运色：深蓝色</li>
+            <li>喜欢饮品：冰美式</li>
+        </ul>
+
+    </div>
+
+    <div class="baike-side">
+        <img src="../assets/images/baike/baike_zou_yun.png"
+            style="width:100%;border:1px solid #ddd;">
+        <p style="font-size:12px;color:#999;text-align:center;">
+            邹耘官方宣传照
+        </p>
+
+        <div class="weibo-entry" onclick="openZouYunWeibo()">
+            邹耘微博主页
+        </div>
+    </div>
+</div>
+
+<script>
+function goBackSearch(){
+    window.parent.postMessage({
+        type:'NAVIGATE',
+        url:'pages/baidu_home.html',
+        displayUrl:'百度搜索'
+    },'*');
+}
+
+function openZouYunWeibo(){
+    window.parent.postMessage({
+        type:'NAVIGATE',
+        url:'pages/weibo/zou_yun.html',
+        displayUrl:'微博'
+    }, '*');
+}
+</script>
+
+</body>
+</html>

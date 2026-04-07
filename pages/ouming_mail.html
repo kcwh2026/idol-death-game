@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>邮件</title>
+
+<style>
+body{
+    margin:0;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f3f4f7;
+    color:#333;
+    height:100vh;
+    overflow:hidden;
+}
+
+.mail-app{
+    display:flex;
+    height:100vh;
+    width:100%;
+}
+
+.mail-sidebar{
+    width:320px;
+    background:#f7f8fb;
+    border-right:1px solid #ddd;
+    display:flex;
+    flex-direction:column;
+}
+
+.mail-sidebar-header{
+    padding:18px 20px 12px;
+    border-bottom:1px solid #e5e5e5;
+    background:#fff;
+}
+
+.mail-title{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.mail-folder-tabs{
+    display:flex;
+    gap:8px;
+}
+
+.folder-btn{
+    padding:7px 14px;
+    border-radius:18px;
+    background:#eceff5;
+    font-size:13px;
+    cursor:pointer;
+}
+
+.folder-btn.active{
+    background:#dce9ff;
+    color:#1d5fd0;
+    font-weight:bold;
+}
+
+.mail-list{
+    flex:1;
+    overflow-y:auto;
+    padding:8px 0;
+}
+
+.mail-item{
+    padding:12px 16px;
+    border-bottom:1px solid #ececec;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.mail-item:hover{
+    background:#eef4ff;
+}
+
+.mail-item.active{
+    background:#dce9ff;
+}
+
+.mail-item.unread{
+    background:#f7fbff;
+}
+
+.mail-item.unread .mail-sender,
+.mail-item.unread .mail-subject{
+    font-weight:bold;
+}
+
+.unread-dot{
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#3388ff;
+    margin-right:8px;
+}
+
+.mail-item-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.mail-sender{
+    font-size:14px;
+    font-weight:bold;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.mail-time{
+    font-size:12px;
+    color:#999;
+    white-space:nowrap;
+}
+
+.mail-subject{
+    font-size:13px;
+    margin:4px 0;
+}
+
+.mail-snippet{
+    font-size:12px;
+    color:#888;
+    line-height:1.5;
+}
+
+.mail-content{
+    flex:1;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.mail-content-header{
+    padding:22px 28px 18px;
+    border-bottom:1px solid #e8e8e8;
+}
+
+.mail-content-subject{
+    font-size:28px;
+    font-weight:bold;
+    line-height:1.4;
+    margin-bottom:14px;
+}
+
+.mail-meta{
+    font-size:13px;
+    color:#666;
+    line-height:1.9;
+}
+
+.mail-body{
+    flex:1;
+    overflow-y:auto;
+    padding:28px;
+}
+
+.mail-body-text{
+    white-space:pre-wrap;
+    font-size:16px;
+    line-height:1.95;
+}
+
+.empty-state{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#999;
+    font-size:16px;
+    height:100%;
+}
+
+.mobile-back-btn{
+    display:none;
+    padding:14px 16px;
+    border-bottom:1px solid #eee;
+    background:#fff;
+    font-size:14px;
+    color:#3388ff;
+    cursor:pointer;
+}
+
+/* 平板 */
+@media (max-width: 900px){
+    .mail-sidebar{
+        width:260px;
+    }
+
+    .mail-content-subject{
+        font-size:22px;
+    }
+
+    .mail-body{
+        padding:20px;
+    }
+}
+
+/* 手机 */
+@media (max-width: 768px){
+    .mail-app{
+        display:block;
+    }
+
+    .mail-sidebar{
+        width:100%;
+        height:100vh;
+        border-right:none;
+    }
+
+    .mail-content{
+        display:none;
+        width:100%;
+        height:100vh;
+    }
+
+    .mail-content.mobile-show{
+        display:flex;
+    }
+
+    .mail-sidebar.mobile-hide{
+        display:none;
+    }
+
+    .mobile-back-btn{
+        display:block;
+    }
+
+    .mail-content-header{
+        padding:16px;
+    }
+
+    .mail-content-subject{
+        font-size:20px;
+    }
+
+    .mail-body{
+        padding:16px;
+    }
+
+    .mail-body-text{
+        font-size:15px;
+        line-height:1.8;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="mail-app">
+        <aside class="mail-sidebar">
+            <div class="mail-sidebar-header">
+                <div class="mail-title">邮件</div>
+                <div class="mail-folder-tabs">
+                    <div class="folder-btn active" onclick="switchFolder('inbox', this)">收件箱</div>
+                    <div class="folder-btn" onclick="switchFolder('sent', this)">发件箱</div>
+                </div>
+            </div>
+            <div class="mail-list" id="mail-list"></div>
+        </aside>
+
+        <main class="mail-content">
+            <div id="mail-view">
+                <div class="empty-state">请选择一封邮件</div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const linqinnanMail = {
+            id: 'inbox-linqinnan',
+            sender: '林琴楠',
+            email: 'linqinnan@foxmail.com',
+            subject: '关于我女儿林爱星的事，想拜托您调查',
+            time: '2026/04/01 08:14',
+            snippet: '欧先生，您好。我是林爱星的母亲，林琴楠。今天早上看到新闻后，我一直无法相信，也无法接受……',
+            body: `欧先生，您好。
+
+冒昧打扰您。我是林爱星的母亲，林琴楠。
+
+今天早上看到新闻后，我一直无法相信，也无法接受。公司那边给我的说法太简单了，我不相信事情只是他们说的那样。
+
+昨天下午，爱星来过我这里一趟，走的时候把一只包和一部备用手机落下了。那部手机她平时其实也经常在用，只是不是对外公开的那一部。我后来给她打电话，一直没人接。再往后，就是新闻。
+
+我不懂你们年轻人的事，也不懂娱乐圈。但我知道，我女儿不会无缘无故走到这一步。
+
+如果您愿意接这个委托，请给我留一个方便收件的地址，我会把她落下的手机和包寄给您。里面也许会有您调查需要的东西。
+
+费用不是问题。我只想知道，她到底经历了什么。
+
+林琴楠
+联系电话：138xxxx6721`
+        };
+
+        const inboxMails = [
+            {
+                id: 'inbox-2',
+                sender: '叮咚购会员中心',
+                email: 'service@dingdonggo.com',
+                subject: '欧明先生，32岁生日快乐！您的专属礼券已到账',
+                time: '2026/xx/xx 09:03',
+                snippet: '亲爱的欧明先生：32岁生日快乐。感谢您一直以来对叮咚购的支持，您的专属生日福利已到账……',
+                body: `亲爱的欧明先生：
+
+32岁生日快乐。
+
+感谢您一直以来对叮咚购的支持，您的专属生日福利已到账：
+
+满200减30优惠券 x1
+生鲜品类95折券 x1
+夜间配送免运券 x1
+
+优惠券有效期：即日起至7日内，请尽快使用。
+
+愿你新一岁平安顺遂，吃到喜欢的东西，过想过的生活。
+
+点击前往查看 >>
+叮咚购会员中心`
+            },
+            {
+                id: 'inbox-3',
+                sender: 'Spr1n9 Official Fan Club',
+                email: 'notice@f1owerclub.com',
+                subject: '[会员通讯] Dreaming Night专场应援与入场须知',
+                time: '2026/03/20 20:11',
+                snippet: '亲爱的会员您好：Spr1n9首次专场公演《Dreaming Night》相关应援及入场须知现已公开……',
+                body: `亲爱的会员您好：
+
+Spr1n9首次专场公演《Dreaming Night》相关应援及入场须知现已公开。
+
+本次公演将开放官方手灯联动、限定应援口号征集及现场周边预约，请各位会员提前关注后续通知。
+
+【重点提醒】
+1. 请勿向成员投递未经允许的私人物品
+2. 请勿在场馆周边追车、围堵、偷拍
+3. 请勿传播未经证实的成员私生活信息
+4. 请理性发言，共同维护良好应援秩序
+
+感谢每一位F1ower的理解与配合。
+
+Spr1n9 Official Fan Club`
+            },
+            {
+                id: 'inbox-4',
+                sender: '星娱周刊',
+                email: 'push@starweekly.com',
+                subject: '您关注的艺人林爱星有新动态',
+                time: '2026/02/20 10:02',
+                snippet: '您关注的艺人 林爱星 有新动态：【林爱星生日夜疑与导演钱默群同框，庆生绯闻引发热议】……',
+                body: `您关注的艺人 林爱星 有新动态：
+
+【林爱星生日夜疑与导演钱默群同框，庆生绯闻引发热议】
+
+点击查看详情 >>
+
+如不想继续接收此类推送，可在设置中关闭提醒。`
+            },
+            {
+                id: 'inbox-5',
+                sender: '王女士',
+                email: 'wangmin_1027@163.com',
+                subject: '想拜托您查一下我丈夫最近是不是有问题',
+                time: '2026/03/27 22:41',
+                snippet: '欧先生，您好。朋友介绍我来联系您。我怀疑我丈夫最近在外面有人，但我现在没有证据……',
+                body: `欧先生，您好。
+
+朋友介绍我来联系您。
+我怀疑我丈夫最近在外面有人，但我现在没有证据，也不想惊动他。
+
+如果您这周还有时间，希望能和您约个面谈。
+费用方面可以商量。
+
+盼回复。`
+            },
+            {
+                id: 'inbox-6',
+                sender: '陈建国',
+                email: 'cjg1980@qq.com',
+                subject: '谢谢您，关于我父亲的事情',
+                time: '2026/03/18 18:22',
+                snippet: '欧先生，您好。上次委托您调查养老院护理人员的问题，多亏您提供的录音和照片……',
+                body: `欧先生，您好。
+
+上次委托您调查养老院护理人员的问题，多亏您提供的录音和照片，我已经顺利和院方交涉，家里人都很感谢您。
+
+余款我已经打到您账户，请查收。
+以后如果还有需要，会再联系您。
+
+祝好。
+陈建国`
+            },
+            {
+                id: 'inbox-7',
+                sender: '周同学',
+                email: 'zhouzhou233@outlook.com',
+                subject: '能不能帮我查一下我网恋对象是不是照骗',
+                time: '2026/03/06 00:18',
+                snippet: '老板你好。请问你接不接这种线上调查？我怀疑我对象朋友圈里的腹肌不是他自己的……',
+                body: `老板你好。
+
+请问你接不接这种线上调查？
+我怀疑我对象朋友圈里的腹肌不是他自己的，人和照片差太多了。
+
+如果可以的话，我把聊天记录和截图都发给你。
+麻烦报价。`
+            },
+            {
+                id: 'inbox-8',
+                sender: '委托平台',
+                email: 'noreply@detectivehub.com',
+                subject: '您有1条新的服务评价，请及时查看',
+                time: '2026/03/12 11:20',
+                snippet: '尊敬的认证侦探 欧明：用户“王女士”已确认本次委托完成，并提交服务评价……',
+                body: `尊敬的认证侦探 欧明：
+
+用户“王女士”已确认本次委托完成，并提交服务评价。
+
+请登录平台查看详情：
+
+<a href="#" onclick="goToHub()">点击进入 Detective Hub</a>`
+            }
+        ];
+
+        const sentReplyToLin = {
+            id: 'sent-1',
+            sender: '欧明',
+            email: 'oming.work@protonmail.com',
+            recipient: '林琴楠',
+            recipientEmail: 'linqinnan@foxmail.com',
+            subject: 'Re: 关于我女儿林爱星的事，想拜托您调查',
+            time: '2026/04/01 08:36',
+            snippet: '林女士，您好。邮件已收到，我可以接这个委托。收件地址如下：B市金地庄园3栋2102……',
+            body: `林女士，您好。
+
+        邮件已收到，我可以接这个委托。
+
+        收件地址如下：
+        B市金地庄园3栋2102
+        收件人：欧明
+        电话：186xxxx4903
+
+        手机和包寄到后，我会先做整理，再和您确认后续调查方向。
+        另外，关于爱星最近接触过的人、去过的地方，或者您觉得反常的事情，如果您还能想起更多细节，也请尽量告诉我。
+
+        收到快递后我会第一时间联系您。
+
+        欧明`
+        };
+
+        const sentMails = [
+            {
+                id: 'sent-2',
+                sender: '欧明',
+                email: 'oming.work@protonmail.com',
+                recipient: '王女士',
+                recipientEmail: 'wangmin_1027@163.com',
+                subject: 'Re: 想拜托您查一下我丈夫最近是不是有问题',
+                time: '2026/03/28 09:14',
+                snippet: '王女士，您好。本周五下午三点后我有时间，可以先面谈一次……',
+                body: `王女士，您好。
+
+本周五下午三点后我有时间，可以先面谈一次。
+如果确认正式委托，我会当面和您说明调查方式与费用。
+
+如果时间不方便，也可以再约。
+欧明`
+            },
+            {
+                id: 'sent-3',
+                sender: '欧明',
+                email: 'oming.work@protonmail.com',
+                recipient: '陈建国',
+                recipientEmail: 'cjg1980@qq.com',
+                subject: 'Re: 谢谢您，关于我父亲的事情',
+                time: '2026/03/18 19:05',
+                snippet: '收到。后续如果还有需要，随时联系我。也祝老人家一切顺利……',
+                body: `收到。
+
+后续如果还有需要，随时联系我。
+也祝老人家一切顺利。
+
+欧明`
+            },
+            {
+                id: 'sent-4',
+                sender: '欧明',
+                email: 'oming.work@protonmail.com',
+                recipient: '周同学',
+                recipientEmail: 'zhouzhou233@outlook.com',
+                subject: 'Re: 能不能帮我查一下我网恋对象是不是照骗',
+                time: '2026/03/06 09:33',
+                snippet: '可以接。先把你掌握的聊天记录、照片、账号信息整理发给我……',
+                body: `可以接。
+
+先把你掌握的聊天记录、照片、账号信息整理发给我。
+看完之后我再跟你说能查到什么程度，以及对应费用。
+
+欧明`
+            }
+        ];
+
+        let currentFolder = 'inbox';
+        let currentMailId = null;
+
+        function getCurrentMails() {
+            const unlocked = localStorage.getItem('mail_linqinnan_unlocked') === '1';
+
+            if (currentFolder === 'inbox') {
+                const mails = [...inboxMails];
+
+                if (unlocked) {
+                    mails.unshift(linqinnanMail);
+                }
+
+                return mails;
+            }
+
+            const mails = [...sentMails];
+
+            if (unlocked) {
+                mails.unshift(sentReplyToLin);
+            }
+
+            return mails;
+        }
+
+        function switchFolder(folder, el) {
+            currentFolder = folder;
+            currentMailId = null;
+
+            document.querySelectorAll('.folder-btn').forEach(btn => btn.classList.remove('active'));
+            el.classList.add('active');
+
+            renderMailList();
+            renderEmpty();
+        }
+
+        function renderEmpty() {
+            document.getElementById('mail-view').innerHTML = `<div class="empty-state">请选择一封邮件</div>`;
+        }
+
+        function openMail(mailId) {
+            currentMailId = mailId;
+
+            if (mailId === 'inbox-linqinnan') {
+                    window.parent.postMessage({
+                        type: 'UNLOCK_AUDIO'
+                    }, '*');
+                localStorage.setItem('mail_linqinnan_unread', '0');
+
+                if (localStorage.getItem('phone_delivery_started') !== '1') {
+                    window.parent.postMessage({
+                        type: 'START_PHONE_COUNTDOWN'
+                    }, '*');
+                }
+            }
+
+            renderMailList();
+
+            const mails = getCurrentMails();
+            const mail = mails.find(m => m.id === mailId);
+            if (!mail) return;
+
+            if (currentFolder === 'inbox') {
+                document.getElementById('mail-view').innerHTML = `
+                    <div class="mail-content-header">
+                        <div class="mail-content-subject">${mail.subject}</div>
+                        <div class="mail-meta">
+                            <div><strong>发件人：</strong>${mail.sender} &lt;${mail.email}&gt;</div>
+                            <div><strong>收件人：</strong>欧明 &lt;oming.work@protonmail.com&gt;</div>
+                            <div><strong>日期：</strong>${mail.time}</div>
+                        </div>
+                    </div>
+                    <div class="mail-body">
+                        <div class="mail-body-text">${mail.body}</div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('mail-view').innerHTML = `
+                    <div class="mail-content-header">
+                        <div class="mail-content-subject">${mail.subject}</div>
+                        <div class="mail-meta">
+                            <div><strong>发件人：</strong>欧明 &lt;${mail.email}&gt;</div>
+                            <div><strong>收件人：</strong>${mail.recipient} &lt;${mail.recipientEmail}&gt;</div>
+                            <div><strong>日期：</strong>${mail.time}</div>
+                        </div>
+                    </div>
+                    <div class="mail-body">
+                        <div class="mail-body-text">${mail.body}</div>
+                    </div>
+                `;
+            }
+
+            if (window.innerWidth <= 768) {
+                document.getElementById('mail-sidebar').classList.add('mobile-hide');
+                document.getElementById('mail-content').classList.add('mobile-show');
+            }
+        }
+
+        function renderMailList() {
+            const list = document.getElementById('mail-list');
+            const mails = getCurrentMails();
+
+            list.innerHTML = mails.map(mail => {
+                const isUnread = mail.id === 'inbox-linqinnan' && localStorage.getItem('mail_linqinnan_unread') === '1';
+
+                return `
+                    <div class="mail-item ${mail.id === currentMailId ? 'active' : ''} ${isUnread ? 'unread' : ''}" onclick="openMail('${mail.id}')">
+                        <div class="mail-item-top">
+                            <div class="mail-sender">
+                                ${isUnread ? '<span class="unread-dot"></span>' : ''}
+                                ${currentFolder === 'inbox' ? mail.sender : mail.recipient}
+                            </div>
+                            <div class="mail-time">${mail.time}</div>
+                        </div>
+                        <div class="mail-subject">${mail.subject}</div>
+                        <div class="mail-snippet">${mail.snippet}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        renderMailList();
+        openMail('inbox-2');
+
+        function goToHub() {
+            window.parent.postMessage({
+                type: 'UNLOCK_DETECTIVE_HUB'
+            }, '*');
+
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/detective_hub.html',
+                displayUrl: 'Detective Hub'
+            }, '*');
+        }
+
+        function isMobile(){
+            return window.innerWidth <= 768;
+        }
+
+        function backToMailList(){
+            document.getElementById('mail-sidebar').classList.remove('mobile-hide');
+            document.getElementById('mail-content').classList.remove('mobile-show');
+        }
+
+        const originalOpenMail = openMail;
+        openMail = function(mailId){
+            originalOpenMail(mailId);
+
+            if(isMobile()){
+                document.getElementById('mail-sidebar').classList.add('mobile-hide');
+                document.getElementById('mail-content').classList.add('mobile-show');
+            }
+        }
+
+    </script>
+</body>
+</html>

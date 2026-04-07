@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spr1n9 - 百度搜索</title>
+    <style>
+        /* ==============================
+           全局与基础样式
+           ============================== */
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: #333;
+            background-color: #fff;
+            line-height: 1.6;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+        .hl { color: #c00; } /* 搜索页高亮红字 */
+
+        /* 百科里取消红色高亮 */
+        #baike-wrapper .hl {
+            color: inherit;
+            font-weight: inherit;
+        }
+
+        /* 悬停高亮效果 */
+        .highlight {
+            transition: background-color 0.2s ease-in-out;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .highlight:hover {
+            background-color: #ffeb3b;
+        }
+
+        /* ==============================
+           搜索列表页组件样式 (仿百度)
+           ============================== */
+        .news-section-title { font-size: 18px; font-weight: bold; margin: 30px 0 15px 0; }
+        .news-card {
+            cursor: pointer;
+            margin-bottom: 25px;
+            max-width: 650px;
+            transition: background-color 0.2s;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .news-card:hover { background-color: #f9f9f9; }
+        .news-title {
+            font-size: 18px;
+            color: #0000cc;
+            text-decoration: underline;
+            margin-bottom: 5px;
+            display: inline-block;
+            font-weight: normal;
+        }
+        .news-title:hover { color: #315efb; }
+        .news-content { font-size: 13px; color: #333; margin-bottom: 4px; line-height: 1.6; }
+        .news-meta { font-size: 12px; color: #999; }
+
+        .baidu-baike-preview { display: flex; gap: 15px; margin-top: 10px; cursor: pointer; }
+        .baidu-baike-preview:hover { background-color: #f9f9f9; border-radius: 6px; }
+
+        .res-related-box {
+            background: #f5f6f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 40px;
+            max-width: 620px;
+        }
+        .related-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .related-item { width: 45%; font-size: 14px; color: #0000cc; cursor: pointer; }
+        .related-item:hover { text-decoration: underline; }
+
+        /* ==============================
+           百科详情页样式
+           ============================== */
+        .baike-top-nav {
+            padding: 12px 100px;
+            background: #f8f8f8;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+            color: #666;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .baike-header { padding: 20px 100px 0; }
+        .baike-title { font-size: 34px; font-weight: bold; }
+        .baike-content { display: flex; padding: 20px 100px; gap: 40px; }
+        .baike-section-title {
+            font-size: 22px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin: 30px 0 15px;
+            position: relative;
+        }
+        .baike-section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 60px;
+            height: 3px;
+            background: #3388ff;
+        }
+        .baike-info-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
+        .baike-info-table td { border: 1px solid #e1e1e1; padding: 8px 12px; }
+        .baike-label { background: #f5f5f5; width: 100px; color: #666; }
+        .member-grid { display: flex; flex-wrap: wrap; gap: 15px; }
+        .member-card {
+            width: calc(50% - 10px);
+            border: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .member-photo {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+            background: #ddd;
+            margin-right: 15px;
+        }
+        .baike-member-info { font-size: 13px; line-height: 1.5; }
+        .baike-footer-search { padding: 20px 100px 50px; background: #f8f8f8; margin-top: 40px; }
+        .search-links-grid { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
+        .search-link { width: 20%; font-size: 13px; color: #0000cc; cursor: pointer; }
+
+        @media (max-width: 800px) {
+            .baike-top-nav,
+            .baike-header,
+            .baike-content,
+            .baike-footer-search {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+            .baike-content { flex-direction: column; }
+            .baike-side { width: 100% !important; }
+            .member-card { width: 100%; }
+            .search-link { width: 45%; }
+        }
+
+        /* ==============================
+           新闻详情页通用样式
+           ============================== */
+        .universal-nav {
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 120px;
+            font-size: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+        }
+        @media (max-width: 800px) {
+            .universal-nav { padding: 10px 20px; }
+        }
+        .back-to-search {
+            color: #666;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        .back-to-search:hover { color: #2319dc; }
+
+        .main-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .a-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .a-title {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            color: #000;
+        }
+        .a-meta { font-size: 13px; color: #888; display: flex; gap: 20px; }
+
+        .a-body { font-size: 17px; color: #222; text-align: justify; }
+        .a-body p { margin-bottom: 20px; text-indent: 2em; line-height: 1.8; }
+
+        .a-image-box { text-align: center; margin: 30px 0; text-indent: 0 !important; }
+        .a-image-box img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eaeaea;
+            background: #f9f9f9;
+        }
+        .a-image-caption {
+            font-size: 13px;
+            color: #999;
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* ==============================
+           媒体界面特有主题样式区分
+           ============================== */
+        /* 新浪娱乐 */
+        .sina-theme .media-header {
+            background-color: #d32f2f;
+            color: #fff;
+            padding: 12px 120px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        @media (max-width: 800px) {
+            .sina-theme .media-header { padding: 12px 20px; }
+        }
+        .sina-theme .comment-item {
+            background-color: #f6f6f6;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+        }
+        .sina-theme .comment-user { color: #b71c1c; }
+
+        /* 腾讯娱乐 */
+        .tencent-theme .media-header {
+            background-color: #fff;
+            color: #1976d2;
+            padding: 12px 120px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 2px solid #1976d2;
+        }
+        @media (max-width: 800px) {
+            .tencent-theme .media-header { padding: 12px 20px; }
+        }
+        .tencent-theme .comment-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .tencent-theme .comment-user { color: #1565c0; }
+
+        /* 网易/官方公告 */
+        .official-theme .media-header {
+            background-color: #333;
+            color: #fff;
+            padding: 12px 120px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        @media (max-width: 800px) {
+            .official-theme .media-header { padding: 12px 20px; }
+        }
+        .official-theme .comment-item {
+            border-bottom: 1px dashed #ccc;
+            padding: 15px 0;
+        }
+        .official-theme .comment-user { color: #424242; }
+
+        /* ==============================
+           评论区通用内部样式
+           ============================== */
+        .comments-section {
+            margin-top: 50px;
+            border-top: 2px solid #333;
+            padding-top: 25px;
+        }
+        .comments-main-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #000;
+        }
+        .comment-sub-title {
+            font-size: 15px;
+            color: #666;
+            margin: 25px 0 10px 0;
+            font-weight: bold;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .comment-user { font-weight: bold; }
+        .comment-content {
+            font-size: 15px;
+            color: #333;
+            line-height: 1.6;
+            text-indent: 0 !important;
+        }
+        .comment-footer {
+            text-align: right;
+            font-size: 13px;
+            color: #999;
+            margin-top: 8px;
+        }
+        .comment-footer span {
+            cursor: pointer;
+            margin-left: 3px;
+        }
+        .comment-footer span:hover { color: #d32f2f; }
+    </style>
+</head>
+<body>
+
+    <div id="baidu-results" style="display:block; flex:1; background:#fff; overflow-y:auto; padding:20px 100px;">
+        <div class="universal-nav" style="position: sticky; top: 0; background: #fff; z-index: 10; margin: -20px -100px 20px; padding: 10px 100px;">
+            <span class="back-to-search" onclick="backToBaiduHome()">← 返回百度首页</span>
+        </div>
+
+        <div style="margin-bottom:30px; max-width:650px;">
+            <span style="font-size:20px; cursor:pointer;" onclick="openBaike()">
+                <span class="news-title" style="display:inline-block; margin-bottom:0;">Spr1n9</span>
+                <span style="background:#0366d6; color:#fff; font-size:12px; padding:2px 6px; border-radius:4px; margin-left:8px; text-decoration:none; display:inline-block; vertical-align:middle; font-weight:normal;">百度百科</span>
+            </span>
+            <div class="baidu-baike-preview" onclick="openBaike()">
+                <div style="width:120px; height:80px; background:#eee; flex-shrink:0; overflow:hidden;">
+                    <img src="../assets/images/baike/spr1n9_baike_group.png" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">
+                </div>
+                <div>
+                    <div class="news-content">
+                        <span class="hl">Spr1n9</span>是由 <span class="highlight">FD Entertainment（FOR DREAM）</span> 于2023年推出的四人女子偶像组合，成员由 <span class="highlight">林爱星</span>、<span class="highlight">夏露一</span>、<span class="highlight">邹耘</span>、<span class="highlight">陈思嘉</span> 组成...
+                    </div>
+                    <div style="color:#008000; font-size:13px; margin-top:5px;">baike.baidu.com/item/Spr1n9</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="news-section-title"><span class="hl">Spr1n9</span> 的最新相关信息</div>
+
+        <div class="news-card" onclick="showArticle(1)">
+            <span class="news-title"><span class="hl">Spr1n9</span>冬季回归舞台《银河未眠》首秀，团体热度持续攀升</span>
+            <div class="news-content">
+                昨日，<span class="highlight">FD Entertainment</span>旗下女子偶像团体 <span class="hl">Spr1n9</span> 在年末特别舞台公开全新回归曲《银河未眠》。成员 <span class="highlight">林爱星</span>、<span class="highlight">邹耘</span>、<span class="highlight">陈思嘉</span>、<span class="highlight">夏露一</span> 以四套主题打歌服亮相...
+            </div>
+            <div class="news-meta">来源：新浪娱乐 &nbsp; 2024-12-14 20:36</div>
+        </div>
+
+        <div class="news-card" onclick="showArticle(2)">
+            <span class="news-title"><span class="highlight">Spr1n9</span>首场专场公演《Dreaming Night》官宣，<span class="highlight">F1ower</span>预约热度持续走高</span>
+            <div class="news-content">
+                据官方消息，<span class="highlight">Spr1n9</span>将于2025年3月举办首次专场公演《Dreaming Night》。本次公演将带来《Dream Start》《星轨告白》《夏日心动公式》等代表曲目。
+            </div>
+            <div class="news-meta">来源：腾讯娱乐 &nbsp; 2025-03-02 18:12</div>
+        </div>
+
+        <div class="news-card" onclick="showArticle(3)">
+            <span class="news-title"><span class="highlight">Spr1n9</span>成员<span class="highlight">林爱星</span>去世，<span class="highlight">FD Entertainment</span>发布讣告</span>
+            <div class="news-content">
+                今日上午，<span class="highlight">FD Entertainment</span>发布官方公告，确认女子偶像团体 <span class="highlight">Spr1n9</span> 成员 <span class="highlight">林爱星</span> 已于今日清晨不幸离世，年仅24岁...
+            </div>
+            <div class="news-meta">来源：新浪娱乐 &nbsp; 2026-04-01 11:08</div>
+        </div>
+
+        <div class="news-card" onclick="showArticle(4)">
+            <span class="news-title"><span class="highlight">Spr1n9</span>成员<span class="highlight">陈思嘉</span>宣布退团，将赴海外名校攻读金融专业</span>
+            <div class="news-content">
+                据公开资料显示，成员 <span class="highlight">陈思嘉</span> 已正式宣布退出组合。相关话题 “<span class="highlight">陈思嘉</span>退团” 引发大量讨论。
+            </div>
+            <div class="news-meta">来源：腾讯娱乐 &nbsp; 2026-03-05 09:34</div>
+        </div>
+
+        <div class="news-card" onclick="showArticle(5)">
+            <span class="news-title"><span class="highlight">Spr1n9</span>原定专场公演《Dreaming Night》宣布取消</span>
+            <div class="news-content">
+                受<span class="highlight">林爱星</span>去世事件影响，原定于本月举行的专场公演《Dreaming Night》已确认取消。目前团队将暂停全部公开活动，后续安排另行通知。
+            </div>
+            <div class="news-meta">来源：网易娱乐 &nbsp; 2026-04-03 10:00</div>
+        </div>
+
+        <div class="news-card" onclick="showArticle(6)">
+            <span class="news-title"><span class="highlight">Spr1n9</span>成员<span class="highlight">林爱星</span>生日夜疑与导演钱默群同框，庆生绯闻引发热议</span>
+            <div class="news-content">
+                近日，有媒体拍到组合成员<span class="highlight">林爱星</span>于生日当晚结束拍摄后，与中年导演钱默群一同现身某餐厅门口，相关照片曝光后迅速引发粉丝讨论与热议...
+            </div>
+            <div class="news-meta">来源：新浪娱乐 &nbsp; 2026-02-20 09:18</div>
+        </div>
+
+        <div class="res-related-box">
+            <div style="font-weight:bold; border-bottom:1px solid #ddd; padding-bottom:12px; font-size:16px;">百度热搜相关搜索</div>
+            <div class="related-grid">
+                <span class="related-item">林爱星去世</span>
+                <span class="related-item">林爱星自杀原因</span>
+                <span class="related-item">陈思嘉退团时间</span>
+                <span class="related-item">Spr1n9解散了吗</span>
+                <span class="related-item">Spr1n9四人合照</span>
+                <span class="related-item">林爱星最后舞台</span>
+                <span class="related-item">陈思嘉为什么退团</span>
+                <span class="related-item">Dreaming Night取消</span>
+                <span class="related-item">F1ower悼念</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="baike-wrapper" style="display:none; flex:1; background:#fff; overflow-y:auto; flex-direction:column;">
+        <div class="baike-top-nav">
+            <span class="back-to-search" onclick="backToSearchFromBaike()">← 返回搜索结果</span> &nbsp;|&nbsp; 首页 | 百度百科 | 特色百科 | 知识专题 | 个人中心
+        </div>
+
+        <div class="baike-header">
+            <div class="baike-title"><span class="highlight">Spr1n9</span></div>
+            <div style="color:#666; font-size:14px; margin-top:5px;">中国内地女子偶像团体</div>
+        </div>
+
+        <div class="baike-content">
+            <div class="baike-main" style="flex:1;">
+                <p style="text-indent:2em; line-height:1.8;">
+                    <span class="highlight">Spr1n9</span>是由 <span class="highlight">FD Entertainment</span> （FOR DREAM）于2023年推出的四人女子偶像组合，成员由 <span class="highlight">林爱星</span>、<span class="highlight">夏露一</span>、<span class="highlight">邹耘</span>、<span class="highlight">陈思嘉</span> 组成。
+                    组合于 <span class="highlight">2023年5月20日</span> 正式出道，以“梦境、星光、成长系青春”为核心概念，主打舞台型偶像路线，融合甜美、元气、轻暗黑及未来感风格。
+                </p>
+                <p style="text-indent:2em; line-height:1.8;">
+                    代表作品包括《星轨告白》《Dreaming Night》《夏日心动公式》《银河未眠》。
+                </p>
+
+                <div class="baike-section-title">基本信息</div>
+                <table class="baike-info-table">
+                    <tr>
+                        <td class="baike-label">团体名</td><td><span class="highlight">Spr1n9</span></td>
+                        <td class="baike-label">组合人数</td><td>4人</td>
+                    </tr>
+                    <tr>
+                        <td class="baike-label">出道日期</td><td><span class="highlight">2023年5月20日</span></td>
+                        <td class="baike-label">经纪公司</td><td><span class="highlight">FD Entertainment（FOR DREAM）</span></td>
+                    </tr>
+                    <tr>
+                        <td class="baike-label">组合定位</td><td>女子偶像团体</td>
+                        <td class="baike-label">粉丝名</td><td>F1ower</td>
+                    </tr>
+                    <tr>
+                        <td class="baike-label">应援色</td><td colspan="3">星云紫、晨曦粉、水云蓝、落日橙</td>
+                    </tr>
+                </table>
+
+                <div class="baike-section-title">团队成员</div>
+                <div class="member-grid">
+                    <div class="member-card">
+                        <img src="../assets/images/baike/baike_lin_aixing.png" class="member-photo" onerror="this.src='../assets/images/avatars/lin_aixing_avatar.png'">
+                        <div class="baike-member-info">
+                            <b><span class="highlight">林爱星</span></b><br>
+                            生日：2002年2月19日<br><span style="color:#999;">（享年2026年4月1日）</span><br>
+                            定位：门面 / Center / 主唱<br>
+                            <small>性格：温柔细腻，私下有些天然呆。<br>TMI：收集星星发卡，睡前听白噪音。</small>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <img src="../assets/images/baike/baike_zou_yun.png" class="member-photo" onerror="this.src='../assets/images/avatars/zou_yun_avatar.png'">
+                        <div class="baike-member-info">
+                            <b><span class="highlight">邹耘</span></b><br>
+                            生日：2001年7月16日<br>
+                            定位：队长 / 主舞 / 气氛担当<br>
+                            <small>性格：成熟稳重，团里的姐姐系。<br>TMI：爱喝冰美式，夜宵狂魔。</small>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <img src="../assets/images/baike/baike_chen_sijia.png" class="member-photo" onerror="this.src='../assets/images/avatars/chen_sijia_avatar.png'">
+                        <div class="baike-member-info">
+                            <b><span class="highlight">陈思嘉</span>（已退团）</b><br>
+                            生日：2003年10月8日<br>
+                            定位：主唱 / 氛围系 / 神秘担当<br>
+                            <small>性格：外冷内热，擅长暗黑系舞台。<br>TMI：喜欢紫色系，平时写日记。</small>
+                        </div>
+                    </div>
+                    <div class="member-card">
+                        <img src="../assets/images/baike/baike_xia_luyi.png" class="member-photo" onerror="this.src='../assets/images/avatars/xia_luyi_avatar.png'">
+                        <div class="baike-member-info">
+                            <b><span class="highlight">夏露一</span></b><br>
+                            生日：2002年5月27日<br>
+                            定位：主舞 / Rap / 元气担当<br>
+                            <small>性格：活泼外向，快乐源泉。<br>TMI：特别喜欢自拍，手机全是团照。</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="baike-section-title">团体经历</div>
+                <p><b>2023年：</b><span class="highlight">2023年5月20日</span>正式公开出道曲《Dream Start》，同年完成首次线下Live《Spr1n9 1st Stage》。</p>
+                <p><b>2024年：</b>发布主打《夏日心动公式》，舞台《银河未眠》热度破圈，参加大型偶像拼盘演唱会。</p>
+                <p><b>2025年：</b>举办首次专场公演《Dreaming Night》，成员人气与热度持续提升。</p>
+
+                <div class="baike-section-title">主要作品</div>
+                <ul style="font-size:14px; line-height:2;">
+                    <li>《Dream Start》</li>
+                    <li>《星轨告白》</li>
+                    <li>《Dreaming Night》</li>
+                    <li>《夏日心动公式》</li>
+                    <li>《银河未眠》</li>
+                    <li>《未完成心愿》</li>
+                </ul>
+
+                <div class="baike-section-title">新闻事件</div>
+                <div style="font-size:14px; line-height:1.9;">
+                    <p>
+                        <b><span class="highlight">陈思嘉</span>退团</b><br>
+                        <span style="color:#666;">2026年3月5日</span><br>
+                        官方公告称，<span class="highlight">陈思嘉</span>因个人未来发展规划调整，正式退出组合，后续将赴海外名校攻读金融专业硕士课程。消息公布后迅速引发热议，相关话题“陈思嘉退团”登上多个平台热搜。
+                    </p>
+                    <p>
+                        <b><span class="highlight">林爱星</span>去世</b><br>
+                        <span style="color:#666;">2026年4月1日</span><br>
+                        <span class="highlight">FD Entertainment</span>发布官方公告，确认组合成员<span class="highlight">林爱星</span>于今日清晨不幸离世，年仅24岁。消息公开后迅速引发广泛关注，Spr1n9后续公开活动亦宣布暂停。
+                    </p>
+            </div>
+            </div>
+
+            <div class="baike-side" style="width:260px;">
+                <div style="border:1px solid #ddd; padding:5px;">
+                    <img src="../assets/images/baike/spr1n9_baike_group.png" style="width:100%;" onerror="this.src='../desktop_wallpaper.png'">
+                    <p style="font-size:12px; color:#999; text-align:center; margin-top:5px;"><span class="highlight">Spr1n9</span>官方成团写真</p>
+                </div>
+                <div class="side-stats" style="margin-top:20px; background:#f8f8f8; padding:15px; font-size:12px; line-height:2;">
+                    <b>词条统计</b><br>
+                    浏览次数：34230759次<br>
+                    编辑次数：1337次<br>
+                    最近更新：2026-04-06
+                </div>
+            </div>
+        </div>
+
+        <div class="baike-footer-search">
+            <div style="font-weight:bold; border-bottom:1px solid #ccc; padding-bottom:5px;">百度搜索相关词条</div>
+            <div class="search-links-grid">
+                <span class="search-link">Spr1n9女团成员表</span>
+                <span class="search-link">Spr1n9林爱星</span>
+                <span class="search-link">Spr1n9夏露一生日</span>
+                <span class="search-link">Spr1n9邹耘个人资料</span>
+                <span class="search-link">Spr1n9陈思嘉</span>
+                <span class="search-link">Spr1n9出道日</span>
+                <span class="search-link">Spr1n9组合图片</span>
+                <span class="search-link">Spr1n9团体合照</span>
+                <span class="search-link">Spr1n9官方账号</span>
+                <span class="search-link">Spr1n9成员生日表</span>
+                <span class="search-link">Spr1n9舞台公演</span>
+                <span class="search-link">Spr1n9应援色</span>
+                <span class="search-link">Spr1n9谁是center</span>
+                <span class="search-link">Spr1n9女团百科</span>
+                <span class="search-link">Spr1n9成员关系</span>
+                <span class="search-link"><span class="highlight">林爱星</span>去世</span>
+                <span class="search-link"><span class="highlight">陈思嘉</span>退团</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="article-view" style="display:none; flex:1; background:#fff; overflow-y:auto;">
+        <div class="universal-nav">
+            <span class="back-to-search" onclick="hideArticle()">← 返回百度搜索结果</span>
+        </div>
+        <div id="dynamic-content"></div>
+    </div>
+
+    <script>
+        // 首页搜索进入列表
+        function handleSearch() {
+            const val = document.getElementById('search-input').value.toLowerCase();
+            if (val.includes('spr1n9')) {
+                document.getElementById('baidu-wrapper').style.display = 'none';
+                document.getElementById('baidu-results').style.display = 'block';
+            }
+        }
+        document.getElementById('search-input').addEventListener('keypress', e => {
+            if (e.key === 'Enter') handleSearch();
+        });
+
+        // 搜索结果页返回百度首页
+        function backToBaiduHome() {
+            window.parent.postMessage({
+                type: 'NAVIGATE',
+                url: 'pages/baidu_home.html',
+                displayUrl: '百度'
+            }, '*');
+        }
+
+        // 列表与百科切换
+        function openBaike() {
+            document.getElementById('baidu-results').style.display = 'none';
+            document.getElementById('baike-wrapper').style.display = 'flex';
+            document.getElementById('baike-wrapper').scrollTop = 0;
+        }
+
+        function backToSearchFromBaike() {
+            document.getElementById('baike-wrapper').style.display = 'none';
+            document.getElementById('baidu-results').style.display = 'block';
+        }
+
+        // 列表与新闻详情切换
+        function showArticle(articleId) {
+            document.getElementById('baidu-results').style.display = 'none';
+            document.getElementById('article-view').style.display = 'block';
+            renderArticle(articleId);
+            document.getElementById('article-view').scrollTop = 0;
+        }
+
+        function hideArticle() {
+            document.getElementById('article-view').style.display = 'none';
+            document.getElementById('baidu-results').style.display = 'block';
+            document.getElementById('dynamic-content').innerHTML = '';
+        }
+
+        function goToStartPage() {
+            window.parent.postMessage({ type: 'GO_TO_START' }, '*');
+        }
+
+        // 生成评论 HTML
+        function createComment(user, content, likes) {
+            let highlightedContent = content.replace(/钱默群/g, '<span class="highlight">钱默群</span>');
+            highlightedContent = highlightedContent.replace(/至无畏的你/g, '<span class="highlight">至无畏的你</span>');
+            return `
+                <div class="comment-item">
+                    <div class="comment-header"><span class="comment-user">${user}</span></div>
+                    <div class="comment-content">${highlightedContent}</div>
+                    <div class="comment-footer">👍 <span>${likes}</span></div>
+                </div>
+            `;
+        }
+
+        // 渲染新闻内容
+        function renderArticle(id) {
+            const container = document.getElementById('dynamic-content');
+            let htmlContent = '';
+
+            switch(id) {
+                case 1:
+                    htmlContent = `
+                        <div class="sina-theme">
+                            <div class="media-header">新浪娱乐</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">Spr1n9冬季回归舞台《银河未眠》首秀，团体热度持续攀升</div>
+                                    <div class="a-meta"><span>来源：新浪娱乐</span><span>时间：2024年12月14日 20:36</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>昨日，FD Entertainment旗下女子偶像团体 Spr1n9 在年末特别舞台公开全新回归曲《银河未眠》，引发粉丝广泛关注。成员林爱星、邹耘、陈思嘉、夏露一以四套不同主题打歌服亮相，整体舞台延续了组合一贯的“梦境感”与“星光系”概念，同时在编曲和视觉包装上加入更多成熟、冷感的未来风格，呈现出与以往作品不同的层次感。</p>
+                                    <div class="a-image-box">
+                                        <img src="../assets/images/baike/spr1n9_baike_group.png" alt="银河未眠舞台剧照">
+                                        <span class="a-image-caption">配图为银河未眠舞台合照</span>
+                                    </div>
+                                    <p>据悉，《银河未眠》是Spr1n9于2024年冬季推出的重要回归作品。歌曲以“夜色、心愿、未完成告白”为主线，歌词围绕青春成长中的迷惘与坚持展开，副歌旋律极具记忆点，舞蹈编排则兼顾整齐度与舞台观赏性。尤其在舞台中段，成员们围绕星轨灯阵完成队形转换，被不少网友评价为“今年最有记忆点的女团舞台之一”。</p>
+                                    <p>从现场及后续释出的直拍来看，成员林爱星依旧稳居视觉中心，无论是开场镜头中的近景表情，还是副歌部分的主唱段落，都展现出较强的舞台掌控力。邹耘的舞蹈表现、夏露一的节奏处理以及陈思嘉偏冷感的气质表达，也为整场表演增添了不少层次。相关话题“Spr1n9银河未眠首秀”“林爱星 星光感”等迅速登上热搜榜，引发粉丝与路人热议。</p>
+                                    <p>有业内观察指出，随着品牌活动、拼盘舞台及成员个人曝光度同步提升，Spr1n9目前正处于团体热度持续上升阶段。尤其在近期多场年末舞台中，组合的现场应援规模与网络传播数据均表现亮眼，逐渐从新生代女团中脱颖而出。对于此次回归，粉丝F1ower纷纷留言表示：“冬天真的很适合这首歌”“四个人在一起的舞台氛围太完整了”“希望她们能被更多人看到”。</p>
+                                </div>
+                                <div class="comments-section">
+                                    <div class="comments-main-title">全部评论 (94)</div>
+                                    <div class="comment-sub-title">【热门评论】</div>
+                                    ${createComment("F1ower星轨站", "冬季回归真的太适合《银河未眠》了！！开场那个星轨灯阵一出来我鸡皮疙瘩都起来了，四个人站在一起的画面好美。", "4.8w")}
+                                    ${createComment("爱星今天吃饭了吗", "林爱星今天状态真的好好，开场近景那个眼神太绝了。", "3.6w")}
+                                    ${createComment("月亮落进银河里", "这首歌的氛围感好强，好像冬天凌晨一个人坐车回家的感觉。", "2.9w")}
+                                    ${createComment("今天也想辞职", "她是不是又瘦了……舞台很好看，但感觉比上次直播又薄了一圈。", "2.1w")}
+                                    ${createComment("宇宙甜妹研究所", "副歌的时候爱星那个高音有点喘，是不是最近行程太满了。", "1.8w")}
+                                    ${createComment("想去Dreaming Night", "求求公司快点官宣专场吧，这首歌现场一定很好哭。", "1.4w")}
+                                    ${createComment("普通路人甲", "说句实话，她最近是不是脸有点不一样？鼻子感觉更挺了。", "9.6k")}
+                                    ${createComment("星星发卡收藏家", "她ending笑的时候感觉有点勉强，不知道是不是我多想。", "8.3k")}
+                                    ${createComment("今晚不睡觉", "她最近微博发得好少，是不是准备进组拍戏了？", "6.7k")}
+                                    ${createComment("理中客bot", "这团现在热度真的靠林爱星一个人在扛吧。", "5.1k")}
+                                    ${createComment("甜妹研究室", "夏露一今天状态也很好，副歌那段和爱星配合好舒服。", "4.2k")}
+                                    ${createComment("Spr1n9舞台站", "这次服装和舞美真的很高级，终于有点大公司女团的感觉了。", "3.8k")}
+                                    <div class="comment-sub-title">【更多评论】</div>
+                                    ${createComment("用户347821", "总觉得她看起来很累，希望她开心一点。", "213")}
+                                    ${createComment("小熊软糖", "爱星最近是不是没怎么好好吃饭，脸都小了一圈。", "186")}
+                                    ${createComment("匿名用户", "怎么感觉她今天笑得没有以前开心。", "94")}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 2:
+                    htmlContent = `
+                        <div class="tencent-theme">
+                            <div class="media-header">腾讯娱乐</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">Spr1n9首场专场公演《Dreaming Night》官宣，F1ower预约热度持续走高</div>
+                                    <div class="a-meta"><span>来源：腾讯娱乐</span><span>时间：2025年3月2日 18:12</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>据官方消息，FD Entertainment旗下女子偶像团体 Spr1n9 将于2025年3月举办首次专场公演《Dreaming Night》。公告发布后，相关预约通道迅速涌入大量访问，公演关键词在多个平台登上热搜，不少粉丝对Spr1n9首次完整专场舞台表示高度期待。</p>
+                                    <div class="a-image-box">
+                                        <img src="../assets/images/posts/news2_dreaming_poster.png" alt="专场公演海报">
+                                        <span class="a-image-caption">配图为深蓝与银白主色调的《Dreaming Night》概念海报</span>
+                                    </div>
+                                    <p>据了解，《Dreaming Night》将是Spr1n9自2023年出道以来规格最高、内容最完整的一次团体专场公演。演出曲目预计将覆盖《Dream Start》《星轨告白》《夏日心动公式》《银河未眠》等多首代表作品，同时还将加入全新舞台编排、团体特别环节以及成员个人展示内容。</p>
+                                    <p>官方公开的首张概念海报采用深蓝与银白为主色调，结合繁星、月轨与梦境投影元素，延续了Spr1n9一贯的青春幻想概念风格。四位成员林爱星、邹耘、陈思嘉、夏露一以统一主题造型亮相，整体视觉氛围极具梦幻感，也进一步提升了粉丝对本次公演的期待值。</p>
+                                    <p>作为近年来热度稳步上升的新生代女子偶像团体，Spr1n9凭借多首高传播度舞台作品持续积累人气，成员个人辨识度与团体整体风格逐渐成型。此次首次专场公演的官宣，也被外界视为组合进入新阶段的重要标志。从预约数据和社交平台讨论度来看，Spr1n9当前的粉丝黏性与活跃度均处于较高水平，不少业内人士认为，若本次公演顺利举行，有望进一步夯实其在新生代偶像市场中的位置。</p>
+                                    <p>值得一提的是，官方在预热文案中写道：“那些未完成的心愿，会在这一晚被认真唱给你听。”这句带有明显情感指向的宣传语，也让不少F1ower直呼“破防”。有粉丝留言表示：“从拼盘到专场，她们真的一步一步走过来了。”“Dreaming Night这个名字太像Spr1n9了，光看海报就已经想去现场了。”</p>
+                                    <p>目前，关于本次公演的具体场馆、票务安排及周边活动信息，官方尚未全部公开，后续仍将陆续释出更多内容。</p>
+                                </div>
+                                <div class="comments-section">
+                                    <div class="comments-main-title">全部评论 (143)</div>
+                                    <div class="comment-sub-title">【热门评论】</div>
+                                    ${createComment("F1ower总站", "终于官宣专场了！！！这次一定要抢到票。", "5.2w")}
+                                    ${createComment("想在现场看银河", "《银河未眠》现场版一定会特别好哭，已经开始期待了。", "4.3w")}
+                                    ${createComment("爱星今天吃饭了吗", "四个人都在，海报真的太好看了。", "3.8w")}
+                                    ${createComment("月亮落进银河里", "Dreaming Night 这个名字真的很像她们，一看就很有宿命感。", "2.9w")}
+                                    ${createComment("星星发卡收藏家", "希望有成员个人solo环节，真的很想看爱星唱抒情歌。", "2.1w")}
+                                    ${createComment("普通路人甲", "这团现在势头真的不错，第一次专场来得挺快。", "1.6w")}
+                                    ${createComment("今晚不睡觉", "陈思嘉这次造型好漂亮，终于不是上次那个紫黑妆了。", "1.2w")}
+                                    ${createComment("Spr1n9舞台站", "求求一定要有《夏日心动公式》！！！", "9.7k")}
+                                    ${createComment("匿名用户", "感觉林爱星最近状态有点疲惫，希望公演前多休息。", "6.1k")}
+                                    ${createComment("理中客bot", "说实话，票价别太离谱就行。", "4.3k")}
+                                    <div class="comment-sub-title">【更多评论】</div>
+                                    ${createComment("用户341982", "总感觉这次专场之后会有大事发生。", "143")}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 3:
+                    htmlContent = `
+                        <div class="sina-theme">
+                            <div class="media-header">新浪娱乐</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">Spr1n9成员林爱星去世，FD Entertainment发布讣告</div>
+                                    <div class="a-meta"><span>来源：新浪娱乐</span><span>时间：2026年4月1日 11:08</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>今日上午，FD Entertainment发布官方公告，确认女子偶像团体 Spr1n9 成员林爱星已于今日上午不幸离世，年仅24岁。消息公布后，迅速在网络上引发震动，多项相关词条短时间内登上热搜，不少粉丝与网友对这一消息表示难以置信。</p>
+                                    <div class="a-image-box">
+                                        <img src="../assets/images/posts/lin_aixing_diaryself.png" alt="讣告文件">
+                                        <span class="a-image-caption">林爱星生前照片</span>
+                                    </div>
+                                    <p>公告中写道，林爱星因长期高强度工作与心理压力影响，于今日清晨离世。公司方面表示，目前正全力配合家属处理相关事宜，并呼吁外界尊重逝者及其家属隐私，不信谣、不传谣。公告还提到，Spr1n9后续所有公开活动将暂时停止，原定行程将根据实际情况另行安排。</p>
+                                    <p>作为Spr1n9的门面、Center及主唱，林爱星自出道以来一直拥有较高人气。她因甜美外形、细腻表达与稳定舞台发挥受到不少粉丝喜爱，也是组合中最具代表性的成员之一。无论是《Dream Start》时期的初亮相，还是后续《夏日心动公式》《银河未眠》等舞台中的核心站位，林爱星始终是Spr1n9舞台叙事的重要中心。她曾在采访中多次提到，希望未来能够挑战更多不同类型的舞台与表演形式，也曾表示“想成为能够被记住很久的人”。</p>
+                                    <p>消息公开后，大量粉丝涌入Spr1n9及林爱星相关社交平台留言悼念。有粉丝写道：“昨天还在期待专场，今天就只剩讣告。”“不敢相信那个总是笑着的人会这样离开。”也有网友呼吁关注娱乐行业从业者的身心状态，认为不应只在悲剧发生后才重新讨论艺人的心理健康问题。</p>
+                                    <p>截至目前，关于林爱星离世的更多细节，官方尚未进一步说明。事件仍在持续发酵中。</p>
+                                </div>
+                                <div class="comments-section">
+                                    <div class="comments-main-title">全部评论 (1.1w)</div>
+                                    <div class="comment-sub-title">【热门评论】</div>
+                                    ${createComment("F1ower星轨站", "怎么可能……我早上还在刷她的视频………………", "2.8w")}
+                                    ${createComment("爱星今天吃饭了吗", "今天不是愚人节吗，求求了告诉我是假的。", "2.4w")}
+                                    ${createComment("月亮落进银河里", "专场不是还没开吗，为什么会变成这样。", "1.9w")}
+                                    ${createComment("想去Dreaming Night", "昨天还在和朋友说要抢票，今天看到这个真的崩溃了。", "1.6w")}
+                                    ${createComment("星星发卡收藏家", "她明明一直都在笑啊。", "1.3w")}
+                                    <div class="comment-sub-title">【更多评论】</div>
+                                    ${createComment("普通路人甲", "怎么又是长期心理压力，公司永远都这一套说辞。", "9.8k")}
+                                    ${createComment("匿名用户", "她最近状态真的一直不太对。", "8.2k")}
+                                    ${createComment("今晚不睡觉", "早上六点出的事，为什么现在才发公告。", "6.7k")}
+                                    ${createComment("理中客bot", "先别带节奏，等警方通报。", "4.3k")}
+                                    ${createComment("用户347821", "昨天还在舞台上发光的人，今天怎么就没了。", "3.8k")}
+                                    ${createComment("匿名用户", "是不是和导演那个绯闻男友有关。", "624")}
+                                    ${createComment("路过吃瓜", "陈思嘉退团是不是和这个有关。", "412")}
+                                    ${createComment("月亮不会说话", "你们前几天不是还在骂她胖了、状态差、笑得假？", "1.1w")}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 4:
+                    htmlContent = `
+                        <div class="tencent-theme">
+                            <div class="media-header">腾讯娱乐</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">Spr1n9成员陈思嘉宣布退团，将赴海外名校攻读金融专业</div>
+                                    <div class="a-meta"><span>来源：腾讯娱乐</span><span>时间：2026年3月5日 09:34</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>据官方消息，FD Entertainment旗下女子偶像团体 Spr1n9 成员陈思嘉于今日正式宣布退出组合，后续将暂停演艺活动，并赴海外继续深造。消息公布后迅速引发热议，相关话题“陈思嘉退团”“星嘉CP”登上多个平台热搜。</p>
+                                    <div class="a-image-box">
+                                        <img src="../assets/images/posts/chen_sijia_diaryself.png" alt="陈思嘉退团公告/照片">
+                                        <span class="a-image-caption">陈思嘉照片</span>
+                                    </div>
+                                    <p>公告中写道，陈思嘉因个人未来发展规划调整，经过与公司及成员充分沟通后，决定终止后续团体活动，并将于今年秋季前往海外名校攻读金融专业硕士课程。公司方面表示尊重其个人选择，并感谢她自出道以来对Spr1n9所作出的努力与贡献。</p>
+                                    <p>作为Spr1n9出道初期的重要成员之一，陈思嘉在团内定位为主唱与氛围系担当，因其偏冷感的外形气质与较强的舞台表现力，在组合中拥有鲜明辨识度。尤其是与成员林爱星组成的人气CP“星嘉”长期拥有极高讨论度，被不少粉丝视为团内最具代表性的搭档关系之一。两人在舞台互动、团综花絮及直播中的默契表现，曾多次引发热议，也为组合积累了大量核心粉丝群体。</p>
+                                    <p>此次退团消息公布后，不少粉丝表示震惊与不舍。尤其是在组合首次专场公演《Dreaming Night》官宣后不久宣布人员变动，更让外界对Spr1n9未来舞台安排产生关注。部分粉丝表示理解其继续求学的决定，也有部分网友认为，此举意味着其已有明确退圈打算。</p>
+                                    <p>截至目前，FD Entertainment尚未进一步公布Spr1n9后续是否将以三人形式继续活动。</p>
+                                </div>
+                                <div class="comments-section">
+                                    <div class="comments-main-title">全部评论 (4.8k)</div>
+                                    ${createComment("F1ower星轨站", "为什么偏偏是专场前退团，这里面肯定有事。", "4.8w")}
+                                    ${createComment("星嘉今天发糖了吗", "最近她和爱星互动真的少了很多，不会和二月那个导演绯闻有关吧。会不会是因为林爱星恋爱，CP没法继续卖了，所以陈思嘉直接退了。", "4.1w")}
+                                    ${createComment("想去Dreaming Night", "我早就想说了，她最近几次舞台part少得离谱，资源分配一直就有问题。", "3.7w")}
+                                    ${createComment("唯爱星", "别什么都怪林爱星，她一个人扛团这么久已经够累了。", "2.3w")}
+                                    ${createComment("匿名用户", "之前不是有人爆料她和高层关系不好吗。", "1.9w")}
+                                    ${createComment("嘉嘉别回头", "她part少、镜头少你们装看不见，现在退团了又来骂她。", "1.9w")}
+                                    ${createComment("今晚不睡觉", "感觉像是被逼退的。", "1.6w")}
+                                    ${createComment("Spr1n9团粉", "专场还没开评论区就开始互撕，能不能别再给团招黑了。", "1.5w")}
+                                    ${createComment("理中客bot", "说读书只是体面说法吧。", "1.4w")}
+                                    ${createComment("用户347821", "有没有可能是拒绝了什么饭局或者资源交换。", "1.2w")}
+                                    ${createComment("今天也想辞职", "为什么女艺人每次离开都一定要被怀疑背后有肮脏交易。", "1.1w")}
+                                    ${createComment("匿名用户", "女团不就是吃青春饭，趁年轻赶紧走算聪明。", "8.7k")}
+                                    ${createComment("吃瓜路人", "说实话，不追星的人看着就是团要散了，一个绯闻一个退团，最近戏真多。", "8.2k")}
+                                    ${createComment("匿名用户", "美帝CP果然都是假的，一个忙着陪导演，一个忙着跑路。", "6.5k")}
+                                    ${createComment("路过吃瓜", "是不是因为没陪好公司高层啊。", "6.2k")}
+                                    ${createComment("用户998271", "这种冷脸人设本来就不讨喜，被雪藏很正常。", "5.8k")}
+                                    ${createComment("匿名用户", "长得也不是最漂亮那个，资源少不是很正常？", "4.6k")}
+                                    ${createComment("用户551823", "不会是怀孕了吧，所以急着退。等生完孩子再回来，就说读完书了哈哈", "3.9k")}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 5:
+                    htmlContent = `
+                        <div class="official-theme">
+                            <div class="media-header">网易娱乐</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">Spr1n9原定专场公演《Dreaming Night》宣布取消</div>
+                                    <div class="a-meta"><span>来源：官方微博</span><span>时间：2026年4月3日 10:00</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>受林爱星去世事件影响，Spr1n9原定于本月举行的首次专场公演《Dreaming Night》已确认取消。FD Entertainment于今日上午发布通知称，基于当前情况与家属意愿，团队将暂停全部公开活动，原定演出、宣传及线下相关安排均不再进行，后续事项将另行通知。</p>
+                                    <p>《Dreaming Night》原本被视为Spr1n9出道以来最重要的一次阶段性舞台总结。从团体首张概念海报公开，到预约热度持续上升，再到粉丝自发筹备应援活动，整场公演此前已积累较高关注度。对许多F1ower而言，这不仅是一场演出，更像是陪伴团体一路成长后终于等来的“见面时刻”。因此，取消消息一出，不少粉丝表示遗憾与失落，也有人坦言“现在再看到这个名字，已经只剩难过”。</p>
+                                    <p>公告发布后，关于票务处理、官方周边及应援项目后续安排，也成为粉丝关注焦点。对此，公司表示，相关退款及善后机制正在整理中，具体说明将通过官方渠道统一公布。同时，官方呼吁外界给予成员、工作人员及家属足够的缓冲空间，不要围堵、偷拍或传播未经证实的信息。</p>
+                                    <p>有评论指出，《Dreaming Night》的取消，意味着Spr1n9原本清晰可见的上升轨迹被骤然打断。对于一个正处于热度攀升期的偶像团体而言，这种中止并不仅仅是商业活动层面的停止，更像是一个原本仍在延伸的“青春叙事”被强行按下了暂停键。</p>
+                                    <p>截至目前，关于Spr1n9未来是否还会以剩余成员形式继续活动，官方暂未透露更多信息。</p>
+                                </div>
+                                <div class="comments-section">
+                                    <div class="comments-main-title">全部评论 (5.2w)</div>
+                                    ${createComment("F1ower星轨站", "昨天还在和朋友商量抢票，现在突然告诉我取消了，我真的接受不了。", "5.2w")}
+                                    ${createComment("想去Dreaming Night", "我宁愿它永远不开，也不想是以这种方式结束。", "4.6w")}
+                                    ${createComment("月亮落进银河里", "这个名字现在看一眼都好难受。", "3.9w")}
+                                    ${createComment("爱星今天吃饭了吗", "她明明说过很期待这场专场。", "3.2w")}
+                                    ${createComment("Spr1n9团粉", "四个人的Dreaming Night，终究还是没能等到。", "2.8w")}
+                                    ${createComment("今天也想辞职", "短短一个月，从导演绯闻、退团，到现在……真的像做梦。", "1.9w")}
+                                    ${createComment("用户347821", "原来“未完成的心愿，会在这一晚唱给你听”最后真的成了未完成。", "1.6w")}
+                                    ${createComment("理中客bot", "她之前状态那么差，公司真的一点都没发现吗。", "1.4w")}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 6:
+                    htmlContent = `
+                        <div class="sina-theme">
+                            <div class="media-header">新浪娱乐</div>
+                            <div class="main-container">
+                                <div class="a-header">
+                                    <div class="a-title">Spr1n9成员林爱星生日夜疑与导演<span class="highlight">钱默群</span>同框，庆生绯闻引发热议</div>
+                                    <div class="a-meta"><span>来源：新浪娱乐</span><span>时间：2026年2月20日 09:18</span></div>
+                                </div>
+                                <div class="a-body">
+                                    <p>近日，有媒体拍到 FD Entertainment 旗下女子偶像团体 Spr1n9 成员林爱星于生日当晚结束拍摄后，与青年导演<span class="highlight">钱默群</span>一同现身某餐厅门口，相关照片曝光后迅速引发热议。画面显示，2月19日晚，林爱星在结束新剧《<span class="highlight">至无畏的你</span>》当天的拍摄后，与导演<span class="highlight">钱默群</span>及部分工作人员共同前往餐厅用餐，散场时两人一前一后走出饭店门口，并被媒体拍下同框画面。相关话题“林爱星导演庆生”“林爱星<span class="highlight">钱默群</span>”迅速登上多个平台热搜。</p>
+                                    <div class="a-image-box">
+                                        <img src="news6_scandal.png" alt="模糊同框偷拍图">
+                                        <span class="a-image-caption">(夜晚饭店门口两人模糊同框照片，林爱星疑似手捧花束)</span>
+                                    </div>
+                                    <p>据现场拍摄画面显示，林爱星当天身着黑色长款大衣，手中疑似抱有花束及礼品袋，而<span class="highlight">钱默群</span>则站在其身侧低头交谈。由于当天恰逢林爱星生日，不少网友猜测此次聚餐或与剧组为其庆生有关。</p>
+                                    <p>据公开资料显示，<span class="highlight">钱默群</span>为近年活跃于偶像剧及网络短剧领域的中年导演，曾执导作品《夜色未央》《寄出的春日信》，口碑较为一般。目前，林爱星正参与其新剧《<span class="highlight">至无畏的你</span>》的拍摄，该项目为公司近期重点推进的成员个人影视资源之一。</p>
+                                    <p>事件曝光后，不少网友对双方关系展开猜测。有粉丝认为二人仅为正常工作往来及剧组庆生活动，也有部分网友质疑双方关系是否超出工作范围。由于林爱星当前正处于团体活动上升期，此次生日夜同框也引发了部分粉丝对偶像职业规划及团体未来安排的讨论。</p>
+                                    <p>截至目前，FD Entertainment尚未对相关传闻作出正式回应，林爱星本人微博亦未更新相关内容。</p>
+                                </div>
+                                <div class="comments-section">
+                                    <div class="comments-main-title">全部评论 (5.9k)</div>
+                                    <div class="comment-sub-title">【评论区（按点赞从高到低）】</div>
+                                    ${createComment("F1ower星轨站", "剧组给艺人庆生不是很正常吗，别什么都往恋爱上带。", "4.1w")}
+                                    ${createComment("星嘉今天发糖了吗", "生日当天和导演一起过，还是有点怪怪的。", "3.1w")}
+                                    ${createComment("月亮落进银河里", "下戏后一起吃饭也能上热搜，内娱真的什么都能拍。", "2.7w")}
+                                    ${createComment("唯爱星", "她终于有个人资源了，别在这时候带节奏。", "1.8w")}
+                                    ${createComment("星嘉是真的", "所以生日不是和成员一起过吗……", "1.2w")}
+                                    ${createComment("匿名用户", "导演资源饭，懂的都懂。", "8.4k")}
+                                    ${createComment("路过吃瓜", "这资源不会就是这么来的吧。", "7.1k")}
+                                    ${createComment("匿名用户", "女偶像想转型演员不都这套路。", "5.9k")}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+
+            container.innerHTML = htmlContent;
+        }
+        
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'BROWSER_BACK') {
+                if (document.getElementById('article-view').style.display === 'block') {
+                    hideArticle();
+                } else if (document.getElementById('baike-wrapper').style.display === 'flex') {
+                    backToSearchFromBaike();
+                } else if (document.getElementById('baidu-results').style.display === 'block') {
+                    window.parent.postMessage({
+                        type: 'NAVIGATE',
+                        url: 'pages/baidu_home.html',
+                        displayUrl: '百度'
+                    }, '*');
+                }
+            }
+        });
+    </script>
+    
+</body>
+</html>
